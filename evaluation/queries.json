@@ -1,0 +1,44 @@
+[
+  {
+    "id": "q1",
+    "query": "steel pipes for water supply",
+    "language": "en",
+    "expected_standards": ["IS 1239", "IS 3589", "IS 6392"],
+    "notes": "Demo evaluation query — expected results based on demo dataset"
+  },
+  {
+    "id": "q2",
+    "query": "LED street lights for municipal roads",
+    "language": "en",
+    "expected_standards": ["IS 16014", "IS 10322", "IS 15885"],
+    "notes": "Demo evaluation query"
+  },
+  {
+    "id": "q3",
+    "query": "PVC insulated electric cables",
+    "language": "en",
+    "expected_standards": ["IS 694", "IS 7098", "IS 5831"],
+    "notes": "Demo evaluation query"
+  },
+  {
+    "id": "q4",
+    "query": "cement for building construction",
+    "language": "en",
+    "expected_standards": ["IS 269", "IS 383", "IS 456"],
+    "notes": "Demo evaluation query"
+  },
+  {
+    "id": "q5",
+    "query": "safety helmet for industrial workers",
+    "language": "en",
+    "expected_standards": ["IS 2206", "IS 15986"],
+    "notes": "Demo evaluation query"
+  },
+  {
+    "id": "q6",
+    "query": "पानी की सप्लाई के लिए स्टील पाइप",
+    "language": "hi",
+    "expected_standards": ["IS 1239", "IS 3589"],
+    "notes": "Hindi query — same semantic intent as q1"
+  }
+]

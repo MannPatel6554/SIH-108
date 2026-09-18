@@ -1,0 +1,708 @@
+{
+  "metadata": {
+    "description": "BIS SmartSpec AI — Demo Dataset",
+    "verification_status": "DEMO",
+    "disclaimer": "These records are for demonstration purposes only. They are NOT verified BIS official data. Standard numbers like IS 1239, IS 3589, etc. are used as demo identifiers. All metadata (titles, years, descriptions) is approximate/illustrative and must be verified against official BIS sources before procurement use.",
+    "generated_for": "SIH 2026 — PS108",
+    "generated_at": "2026-09-17"
+  },
+  "standards": [
+    {
+      "standard_number": "IS 1239",
+      "title": "Steel Tubes, Tubulars and Other Wrought Steel Fittings — Specification",
+      "title_hindi": "स्टील ट्यूब, ट्यूबुलर और अन्य रॉट स्टील फिटिंग — विनिर्देश",
+      "part": "Part 1",
+      "edition_year": 2004,
+      "status": "DEMO",
+      "standard_type": "PRODUCT",
+      "sector": "CONSTRUCTION",
+      "description": "This standard covers steel tubes and tubulars for use in water supply, heating, ventilation, and plumbing applications. It specifies requirements for dimensions, tolerances, mechanical properties, and testing.",
+      "description_hindi": "यह मानक जल आपूर्ति, हीटिंग, वेंटिलेशन और प्लंबिंग अनुप्रयोगों में उपयोग के लिए स्टील ट्यूब और ट्यूबुलर को कवर करता है।",
+      "keywords": ["steel pipes", "steel tubes", "water supply", "plumbing", "tubulars", "IS 1239", "नल", "स्टील पाइप"],
+      "scope": "Steel tubes and tubulars for use in water supply, heating, ventilation and structural purposes.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "ics_code": "23.040.10",
+      "certifications": [
+        {
+          "product_category": "Steel Pipes",
+          "certification_type": "ISI_MARK",
+          "is_mandatory": "UNKNOWN",
+          "scheme": "BIS Product Certification",
+          "verification_status": "DEMO",
+          "notes": "Verify mandatory status from official BIS portal"
+        }
+      ],
+      "related": [
+        {"target": "IS 3589", "type": "RELATED_PRODUCT"},
+        {"target": "IS 1387", "type": "TEST_METHOD"},
+        {"target": "IS 9542", "type": "RELATED_PRODUCT"}
+      ]
+    },
+    {
+      "standard_number": "IS 3589",
+      "title": "Steel Pipes for Water and Sewage — Specification",
+      "title_hindi": "जल और सीवेज के लिए स्टील पाइप — विनिर्देश",
+      "part": null,
+      "edition_year": 2001,
+      "status": "DEMO",
+      "standard_type": "PRODUCT",
+      "sector": "WATER",
+      "description": "This standard covers steel pipes intended for conveyance of water and sewage. It specifies material, dimensions, testing, and marking requirements for pipes used in municipal water supply and sewerage projects.",
+      "description_hindi": "यह मानक जल और सीवेज के संवहन के लिए उपयोग की जाने वाली स्टील पाइप को कवर करता है।",
+      "keywords": ["steel pipes", "water supply", "sewage", "water mains", "IS 3589", "जल आपूर्ति", "पाइप"],
+      "scope": "Steel pipes 200mm to 2000mm nominal bore for conveyance of water and sewage.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "ics_code": "23.040.10",
+      "certifications": [
+        {
+          "product_category": "Steel Pipes (Large Diameter)",
+          "certification_type": "ISI_MARK",
+          "is_mandatory": "UNKNOWN",
+          "scheme": "BIS Product Certification",
+          "verification_status": "DEMO"
+        }
+      ],
+      "related": [
+        {"target": "IS 1239", "type": "RELATED_PRODUCT"},
+        {"target": "IS 3600", "type": "TEST_METHOD"},
+        {"target": "IS 6392", "type": "INSTALLATION"}
+      ]
+    },
+    {
+      "standard_number": "IS 1387",
+      "title": "General Requirements for the Supply of Metallurgical Materials — Specification",
+      "title_hindi": "धातुकर्म सामग्री की आपूर्ति के लिए सामान्य आवश्यकताएँ",
+      "part": null,
+      "edition_year": 1993,
+      "status": "DEMO",
+      "standard_type": "TEST_METHOD",
+      "sector": "MECHANICAL",
+      "description": "General requirements for inspection, testing, and certification of metallurgical materials including steel pipes and tubes. Covers inspection procedures, sampling, and documentation requirements.",
+      "description_hindi": "धातुकर्म सामग्रियों के परीक्षण और निरीक्षण की सामान्य आवश्यकताएँ।",
+      "keywords": ["metallurgical", "inspection", "testing", "steel", "materials", "IS 1387"],
+      "scope": "General requirements applicable to all metallurgical materials covered by Indian Standards.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [],
+      "related": [
+        {"target": "IS 1239", "type": "NORMATIVE_REFERENCE"},
+        {"target": "IS 3589", "type": "NORMATIVE_REFERENCE"}
+      ]
+    },
+    {
+      "standard_number": "IS 6392",
+      "title": "Code of Practice for Installation of Steel Pipe Systems for Water Supply",
+      "title_hindi": "जल आपूर्ति के लिए स्टील पाइप प्रणाली की स्थापना की अभ्यास संहिता",
+      "part": null,
+      "edition_year": 1971,
+      "status": "DEMO",
+      "standard_type": "INSTALLATION",
+      "sector": "WATER",
+      "description": "Code of practice covering the design, installation, and commissioning of steel pipe systems used in water supply projects. Includes requirements for pipe laying, jointing, testing, and protection against corrosion.",
+      "description_hindi": "जल आपूर्ति में स्टील पाइप प्रणाली की स्थापना, संयोजन और परीक्षण के लिए आचार संहिता।",
+      "keywords": ["installation", "steel pipes", "water supply", "code of practice", "pipe laying"],
+      "scope": "Installation, testing and commissioning of steel pipe systems for water supply projects.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [],
+      "related": [
+        {"target": "IS 3589", "type": "NORMATIVE_REFERENCE"},
+        {"target": "IS 1239", "type": "NORMATIVE_REFERENCE"}
+      ]
+    },
+    {
+      "standard_number": "IS 10322",
+      "title": "Luminaires — Specification",
+      "title_hindi": "ल्यूमिनेयर — विनिर्देश",
+      "part": "Part 5 Section 7",
+      "edition_year": 2013,
+      "status": "DEMO",
+      "standard_type": "PRODUCT",
+      "sector": "ELECTRICAL",
+      "description": "This standard covers particular requirements for street lighting luminaires and outdoor luminaires. It specifies safety, performance, and testing requirements for luminaires intended for public lighting applications.",
+      "description_hindi": "सार्वजनिक प्रकाश व्यवस्था के लिए ल्यूमिनेयर विशिष्टताएँ और परीक्षण आवश्यकताएँ।",
+      "keywords": ["luminaires", "street lighting", "LED", "outdoor lighting", "IS 10322", "स्ट्रीट लाइट", "एलईडी"],
+      "scope": "Luminaires for general lighting purposes for street lighting and similar outdoor applications.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "ics_code": "29.140.40",
+      "certifications": [
+        {
+          "product_category": "LED Street Lights",
+          "certification_type": "ISI_MARK",
+          "is_mandatory": "UNKNOWN",
+          "scheme": "BIS Product Certification",
+          "verification_status": "DEMO"
+        }
+      ],
+      "related": [
+        {"target": "IS 16014", "type": "RELATED_PRODUCT"},
+        {"target": "IS 3646", "type": "NORMATIVE_REFERENCE"},
+        {"target": "IS 15885", "type": "TEST_METHOD"}
+      ]
+    },
+    {
+      "standard_number": "IS 16014",
+      "title": "LED Luminaires for Street and Area Lighting — Specification",
+      "title_hindi": "सड़क और क्षेत्र प्रकाश के लिए एलईडी ल्यूमिनेयर — विनिर्देश",
+      "part": null,
+      "edition_year": 2012,
+      "status": "DEMO",
+      "standard_type": "PRODUCT",
+      "sector": "ELECTRICAL",
+      "description": "Specification for LED luminaires intended for street and area lighting. Covers photometric performance, electrical characteristics, thermal management, durability, and safety requirements for LED-based outdoor public lighting.",
+      "description_hindi": "सड़क और क्षेत्र प्रकाश के लिए एलईडी ल्यूमिनेयर के विनिर्देशन संबंधी आवश्यकताएँ।",
+      "keywords": ["LED", "street lighting", "area lighting", "luminaires", "photometric", "IS 16014", "एलईडी स्ट्रीट लाइट"],
+      "scope": "LED luminaires for street and area lighting applications in municipal and public infrastructure projects.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "ics_code": "29.140.40",
+      "certifications": [
+        {
+          "product_category": "LED Street Luminaires",
+          "certification_type": "ISI_MARK",
+          "is_mandatory": "UNKNOWN",
+          "scheme": "BIS Product Certification",
+          "verification_status": "DEMO"
+        }
+      ],
+      "related": [
+        {"target": "IS 10322", "type": "NORMATIVE_REFERENCE"},
+        {"target": "IS 15885", "type": "TEST_METHOD"},
+        {"target": "IS 3646", "type": "NORMATIVE_REFERENCE"}
+      ]
+    },
+    {
+      "standard_number": "IS 3646",
+      "title": "Code of Practice for Interior Illumination",
+      "title_hindi": "आंतरिक प्रकाश व्यवस्था की अभ्यास संहिता",
+      "part": "Part 1",
+      "edition_year": 1992,
+      "status": "DEMO",
+      "standard_type": "INSTALLATION",
+      "sector": "ELECTRICAL",
+      "description": "Code of practice for interior lighting design including recommended illuminance levels for various tasks and environments.",
+      "description_hindi": "विभिन्न कार्यों और वातावरणों के लिए प्रकाश स्तरों की सिफारिशें।",
+      "keywords": ["illumination", "lighting design", "lux", "interior", "IS 3646"],
+      "scope": "Interior and exterior illumination levels and lighting design recommendations.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [],
+      "related": [
+        {"target": "IS 10322", "type": "REFERENCE"},
+        {"target": "IS 16014", "type": "REFERENCE"}
+      ]
+    },
+    {
+      "standard_number": "IS 694",
+      "title": "PVC Insulated Cables for Working Voltages up to and including 1100 V — Specification",
+      "title_hindi": "1100 V तक कार्यशील वोल्टेज के लिए PVC इंसुलेटेड केबल — विनिर्देश",
+      "part": null,
+      "edition_year": 2010,
+      "status": "DEMO",
+      "standard_type": "PRODUCT",
+      "sector": "ELECTRICAL",
+      "description": "This standard covers PVC insulated cables for fixed wiring and for flexible applications up to 1100V working voltage. Specifies conductor material, insulation properties, armoring, sheathing, and testing requirements.",
+      "description_hindi": "1100V तक के लिए PVC इंसुलेटेड केबल के विनिर्देशन, परीक्षण और चिह्नांकन आवश्यकताएँ।",
+      "keywords": ["PVC cable", "insulated cable", "electrical cable", "wiring cable", "IS 694", "पीवीसी केबल", "विद्युत केबल"],
+      "scope": "PVC insulated cables for use in fixed wiring and flexible applications in electrical installations.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "ics_code": "29.060.20",
+      "certifications": [
+        {
+          "product_category": "PVC Insulated Cables",
+          "certification_type": "ISI_MARK",
+          "is_mandatory": "UNKNOWN",
+          "scheme": "BIS Product Certification",
+          "verification_status": "DEMO"
+        }
+      ],
+      "related": [
+        {"target": "IS 7098", "type": "RELATED_PRODUCT"},
+        {"target": "IS 9000", "type": "TEST_METHOD"},
+        {"target": "IS 5831", "type": "NORMATIVE_REFERENCE"}
+      ]
+    },
+    {
+      "standard_number": "IS 7098",
+      "title": "Cross Linked Polyethylene Insulated PVC Sheathed Cables — Specification",
+      "title_hindi": "क्रॉस लिंक्ड पॉलीएथिलीन इंसुलेटेड PVC शिथ्ड केबल — विनिर्देश",
+      "part": "Part 1",
+      "edition_year": 2011,
+      "status": "DEMO",
+      "standard_type": "PRODUCT",
+      "sector": "ELECTRICAL",
+      "description": "Specification for XLPE insulated PVC sheathed cables for working voltages up to 1100V. These cables offer superior thermal and mechanical properties compared to standard PVC insulated cables.",
+      "description_hindi": "XLPE इंसुलेटेड PVC शीथ केबल के विनिर्देशन और परीक्षण आवश्यकताएँ।",
+      "keywords": ["XLPE cable", "cross linked polyethylene", "PVC sheathed", "electrical cable", "IS 7098"],
+      "scope": "XLPE insulated and PVC sheathed cables for power distribution up to 1100V.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "ics_code": "29.060.20",
+      "certifications": [
+        {
+          "product_category": "XLPE Insulated Cables",
+          "certification_type": "ISI_MARK",
+          "is_mandatory": "UNKNOWN",
+          "scheme": "BIS Product Certification",
+          "verification_status": "DEMO"
+        }
+      ],
+      "related": [
+        {"target": "IS 694", "type": "RELATED_PRODUCT"},
+        {"target": "IS 5831", "type": "NORMATIVE_REFERENCE"},
+        {"target": "IS 9000", "type": "TEST_METHOD"}
+      ]
+    },
+    {
+      "standard_number": "IS 5831",
+      "title": "PVC Insulation and Sheath of Electric Cables — Specification",
+      "title_hindi": "विद्युत केबल के PVC इंसुलेशन और शिथ — विनिर्देश",
+      "part": null,
+      "edition_year": 1984,
+      "status": "DEMO",
+      "standard_type": "TEST_METHOD",
+      "sector": "ELECTRICAL",
+      "description": "Specification for PVC insulation and sheath compounds used in electric cables. Covers material properties, testing methods, and performance requirements for PVC compounds.",
+      "description_hindi": "विद्युत केबल में उपयोग किए जाने वाले PVC इंसुलेशन और शीथ कंपाउंड के लिए विनिर्देश।",
+      "keywords": ["PVC insulation", "cable sheath", "electrical cable materials", "IS 5831"],
+      "scope": "PVC compounds for insulation and sheathing of electric cables.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [],
+      "related": [
+        {"target": "IS 694", "type": "NORMATIVE_REFERENCE"},
+        {"target": "IS 7098", "type": "NORMATIVE_REFERENCE"}
+      ]
+    },
+    {
+      "standard_number": "IS 269",
+      "title": "Ordinary Portland Cement — Specification",
+      "title_hindi": "साधारण पोर्टलैंड सीमेंट — विनिर्देश",
+      "part": null,
+      "edition_year": 2015,
+      "status": "DEMO",
+      "standard_type": "PRODUCT",
+      "sector": "CONSTRUCTION",
+      "description": "Specification for ordinary Portland cement covering chemical composition, physical properties, strength requirements, and testing methods. This is the most commonly used cement in construction.",
+      "description_hindi": "साधारण पोर्टलैंड सीमेंट के रासायनिक, भौतिक और शक्ति आवश्यकताएँ।",
+      "keywords": ["cement", "OPC", "Portland cement", "construction", "IS 269", "सीमेंट", "निर्माण"],
+      "scope": "Ordinary Portland Cement for use in construction applications including concrete and masonry.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "ics_code": "91.100.10",
+      "certifications": [
+        {
+          "product_category": "Cement",
+          "certification_type": "ISI_MARK",
+          "is_mandatory": "UNKNOWN",
+          "scheme": "BIS Product Certification",
+          "verification_status": "DEMO"
+        }
+      ],
+      "related": [
+        {"target": "IS 383", "type": "RELATED_PRODUCT"},
+        {"target": "IS 4031", "type": "TEST_METHOD"},
+        {"target": "IS 456", "type": "REFERENCE"}
+      ]
+    },
+    {
+      "standard_number": "IS 383",
+      "title": "Coarse and Fine Aggregate for Concrete — Specification",
+      "title_hindi": "कंक्रीट के लिए मोटे और बारीक समुच्चय — विनिर्देश",
+      "part": null,
+      "edition_year": 2016,
+      "status": "DEMO",
+      "standard_type": "PRODUCT",
+      "sector": "CONSTRUCTION",
+      "description": "Specification for coarse and fine aggregates from natural sources for use in concrete. Covers grading, physical properties, deleterious substances, and testing requirements.",
+      "description_hindi": "कंक्रीट में उपयोग के लिए प्राकृतिक स्रोतों से मोटे और बारीक समुच्चय के विनिर्देश।",
+      "keywords": ["aggregate", "sand", "gravel", "coarse aggregate", "fine aggregate", "concrete", "IS 383"],
+      "scope": "Aggregates from natural sources for use in concrete construction.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [],
+      "related": [
+        {"target": "IS 269", "type": "RELATED_PRODUCT"},
+        {"target": "IS 456", "type": "REFERENCE"},
+        {"target": "IS 2386", "type": "TEST_METHOD"}
+      ]
+    },
+    {
+      "standard_number": "IS 456",
+      "title": "Plain and Reinforced Concrete — Code of Practice",
+      "title_hindi": "सामान्य और प्रबलित कंक्रीट — आचार संहिता",
+      "part": null,
+      "edition_year": 2000,
+      "status": "DEMO",
+      "standard_type": "INSTALLATION",
+      "sector": "CONSTRUCTION",
+      "description": "Code of practice for plain and reinforced concrete covering design, material specifications, workmanship, inspection, and testing for structural concrete construction.",
+      "description_hindi": "संरचनात्मक कंक्रीट निर्माण के लिए डिज़ाइन, सामग्री और कार्यसंरचना आवश्यकताओं की आचार संहिता।",
+      "keywords": ["concrete", "RCC", "reinforced concrete", "structural design", "IS 456", "कंक्रीट"],
+      "scope": "Design and construction of plain and reinforced concrete structures.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "ics_code": "91.080.40",
+      "certifications": [],
+      "related": [
+        {"target": "IS 269", "type": "NORMATIVE_REFERENCE"},
+        {"target": "IS 383", "type": "NORMATIVE_REFERENCE"},
+        {"target": "IS 1786", "type": "NORMATIVE_REFERENCE"}
+      ]
+    },
+    {
+      "standard_number": "IS 4031",
+      "title": "Methods of Physical Tests for Hydraulic Cement",
+      "title_hindi": "हाइड्रोलिक सीमेंट के भौतिक परीक्षण के तरीके",
+      "part": "Part 6",
+      "edition_year": 1988,
+      "status": "DEMO",
+      "standard_type": "TEST_METHOD",
+      "sector": "CONSTRUCTION",
+      "description": "Methods for determination of compressive strength of hydraulic cement mortar cubes. Used as a testing standard for cement quality assessment.",
+      "description_hindi": "सीमेंट की संपीड़न शक्ति निर्धारण के परीक्षण तरीके।",
+      "keywords": ["cement testing", "compressive strength", "hydraulic cement", "IS 4031"],
+      "scope": "Physical test methods for hydraulic cement including compressive strength determination.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [],
+      "related": [
+        {"target": "IS 269", "type": "TEST_METHOD"}
+      ]
+    },
+    {
+      "standard_number": "IS 2206",
+      "title": "Industrial Safety Helmets — Specification",
+      "title_hindi": "औद्योगिक सुरक्षा हेलमेट — विनिर्देश",
+      "part": null,
+      "edition_year": 2009,
+      "status": "DEMO",
+      "standard_type": "SAFETY",
+      "sector": "HEALTHCARE",
+      "description": "Specification for industrial safety helmets (hard hats) for protection against impact and penetration hazards. Covers materials, construction, performance requirements, and test methods.",
+      "description_hindi": "औद्योगिक कार्यस्थलों पर उपयोग के लिए सुरक्षा हेलमेट के विनिर्देशन और परीक्षण आवश्यकताएँ।",
+      "keywords": ["safety helmet", "hard hat", "PPE", "head protection", "industrial safety", "IS 2206", "सुरक्षा हेलमेट", "पीपीई"],
+      "scope": "Industrial safety helmets for protection against falling objects and impact in workplaces.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "ics_code": "13.340.20",
+      "certifications": [
+        {
+          "product_category": "Safety Helmets",
+          "certification_type": "ISI_MARK",
+          "is_mandatory": "UNKNOWN",
+          "scheme": "BIS Product Certification",
+          "verification_status": "DEMO",
+          "notes": "Mandatory for certain sectors — verify from BIS"
+        }
+      ],
+      "related": [
+        {"target": "IS 1179", "type": "RELATED_PRODUCT"},
+        {"target": "IS 6685", "type": "TEST_METHOD"},
+        {"target": "IS 15986", "type": "SAFETY"}
+      ]
+    },
+    {
+      "standard_number": "IS 1179",
+      "title": "Equipment for Eye and Face Protection During Welding Operations — Specification",
+      "title_hindi": "वेल्डिंग के दौरान आँख और चेहरे की सुरक्षा के लिए उपकरण — विनिर्देश",
+      "part": null,
+      "edition_year": 2002,
+      "status": "DEMO",
+      "standard_type": "SAFETY",
+      "sector": "HEALTHCARE",
+      "description": "Specification for eye and face protection equipment used during welding, cutting, and related processes. Covers eye and face shields, goggles, and welding screens.",
+      "description_hindi": "वेल्डिंग और संबंधित प्रक्रियाओं के दौरान आँख और चेहरे की सुरक्षा के लिए उपकरण।",
+      "keywords": ["eye protection", "face protection", "welding PPE", "goggles", "safety equipment", "IS 1179"],
+      "scope": "Personal protective equipment for eye and face protection during welding operations.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [
+        {
+          "product_category": "Eye/Face Protection Equipment",
+          "certification_type": "ISI_MARK",
+          "is_mandatory": "UNKNOWN",
+          "scheme": "BIS Product Certification",
+          "verification_status": "DEMO"
+        }
+      ],
+      "related": [
+        {"target": "IS 2206", "type": "RELATED_PRODUCT"}
+      ]
+    },
+    {
+      "standard_number": "IS 15986",
+      "title": "High Visibility Warning Clothing — Specification",
+      "title_hindi": "उच्च दृश्यता चेतावनी वस्त्र — विनिर्देश",
+      "part": null,
+      "edition_year": 2016,
+      "status": "DEMO",
+      "standard_type": "SAFETY",
+      "sector": "HEALTHCARE",
+      "description": "Specification for high-visibility warning clothing used by workers in road construction, traffic management, and other hazardous environments. Covers retroreflective material requirements and visibility performance.",
+      "description_hindi": "खतरनाक वातावरण में श्रमिकों के लिए उच्च दृश्यता चेतावनी वस्त्र के विनिर्देश।",
+      "keywords": ["high visibility", "safety clothing", "PPE", "reflective vest", "road safety", "IS 15986"],
+      "scope": "High visibility protective clothing for workers exposed to traffic and other hazards.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [],
+      "related": [
+        {"target": "IS 2206", "type": "RELATED_PRODUCT"}
+      ]
+    },
+    {
+      "standard_number": "IS 9542",
+      "title": "Pipes and Fittings — Marking",
+      "title_hindi": "पाइप और फिटिंग — चिह्नांकन",
+      "part": null,
+      "edition_year": 2005,
+      "status": "DEMO",
+      "standard_type": "TERMINOLOGY",
+      "sector": "CONSTRUCTION",
+      "description": "Standard for marking requirements for pipes and fittings. Covers identification marks, manufacturer identification, pressure ratings, and traceability markings.",
+      "description_hindi": "पाइप और फिटिंग के लिए पहचान चिह्न और अनुरेखण चिह्नांकन आवश्यकताएँ।",
+      "keywords": ["pipe marking", "fittings marking", "identification", "IS 9542"],
+      "scope": "Marking requirements for pipes, tubes, and associated fittings.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [],
+      "related": [
+        {"target": "IS 1239", "type": "REFERENCE"},
+        {"target": "IS 3589", "type": "REFERENCE"}
+      ]
+    },
+    {
+      "standard_number": "IS 1786",
+      "title": "High Strength Deformed Steel Bars and Wires for Concrete Reinforcement — Specification",
+      "title_hindi": "कंक्रीट प्रबलन के लिए उच्च शक्ति विकृत स्टील बार और तार — विनिर्देश",
+      "part": null,
+      "edition_year": 2008,
+      "status": "DEMO",
+      "standard_type": "PRODUCT",
+      "sector": "CONSTRUCTION",
+      "description": "Specification for high strength deformed steel bars and wires used as reinforcement in concrete structures. Covers chemical composition, mechanical properties, dimensions, and testing.",
+      "description_hindi": "कंक्रीट संरचनाओं में प्रयुक्त उच्च शक्ति विकृत स्टील बार और तार के विनिर्देश।",
+      "keywords": ["steel bars", "TMT bars", "reinforcement", "rebar", "concrete reinforcement", "IS 1786", "सरिया", "टीएमटी बार"],
+      "scope": "High strength deformed steel bars for concrete reinforcement in construction.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "ics_code": "77.140.15",
+      "certifications": [
+        {
+          "product_category": "TMT/Steel Bars",
+          "certification_type": "ISI_MARK",
+          "is_mandatory": "UNKNOWN",
+          "scheme": "BIS Product Certification",
+          "verification_status": "DEMO"
+        }
+      ],
+      "related": [
+        {"target": "IS 456", "type": "REFERENCE"},
+        {"target": "IS 1608", "type": "TEST_METHOD"}
+      ]
+    },
+    {
+      "standard_number": "IS 1608",
+      "title": "Metallic Materials — Tensile Testing at Ambient Temperature",
+      "title_hindi": "धातु सामग्री — परिवेश तापमान पर तन्य परीक्षण",
+      "part": null,
+      "edition_year": 2005,
+      "status": "DEMO",
+      "standard_type": "TEST_METHOD",
+      "sector": "MECHANICAL",
+      "description": "Standard for tensile testing of metallic materials at ambient temperature. Covers specimen preparation, test machine requirements, and method for determination of mechanical properties.",
+      "description_hindi": "धातु सामग्री के तन्य परीक्षण की विधियाँ और आवश्यकताएँ।",
+      "keywords": ["tensile testing", "metallic materials", "mechanical properties", "IS 1608"],
+      "scope": "Tensile test method for metallic materials at room temperature.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [],
+      "related": [
+        {"target": "IS 1786", "type": "TEST_METHOD"},
+        {"target": "IS 1239", "type": "TEST_METHOD"}
+      ]
+    },
+    {
+      "standard_number": "IS 4162",
+      "title": "Drinking Water — Specification",
+      "title_hindi": "पेयजल — विनिर्देश",
+      "part": null,
+      "edition_year": 2012,
+      "status": "DEMO",
+      "standard_type": "PRODUCT",
+      "sector": "WATER",
+      "description": "Specification for drinking water quality parameters including physical, chemical, and biological requirements. Sets permissible limits for contaminants in water intended for human consumption.",
+      "description_hindi": "मानव उपभोग के लिए पेयजल की गुणवत्ता आवश्यकताएँ और अनुज्ञेय सीमाएँ।",
+      "keywords": ["drinking water", "water quality", "potable water", "water treatment", "IS 4162", "पेयजल"],
+      "scope": "Quality parameters for water intended for human drinking purposes.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [],
+      "related": [
+        {"target": "IS 3589", "type": "REFERENCE"},
+        {"target": "IS 6392", "type": "REFERENCE"}
+      ]
+    },
+    {
+      "standard_number": "IS 15885",
+      "title": "Self Ballasted LED Lamps for General Lighting Services — Safety Requirements",
+      "title_hindi": "सामान्य प्रकाश सेवाओं के लिए स्व-गिट्टी एलईडी लैंप — सुरक्षा आवश्यकताएँ",
+      "part": "Part 2 Section 13",
+      "edition_year": 2012,
+      "status": "DEMO",
+      "standard_type": "SAFETY",
+      "sector": "ELECTRICAL",
+      "description": "Safety requirements for self-ballasted LED lamps intended for general lighting. Covers electrical safety, thermal management, mechanical strength, and marking requirements.",
+      "description_hindi": "सामान्य प्रकाश के लिए स्व-गिट्टी एलईडी लैंप की सुरक्षा आवश्यकताएँ।",
+      "keywords": ["LED lamp", "safety", "self ballasted", "electrical safety", "IS 15885", "एलईडी"],
+      "scope": "Safety requirements for LED lamps including thermal, electrical, and mechanical safety.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [
+        {
+          "product_category": "LED Lamps",
+          "certification_type": "CRS",
+          "is_mandatory": "UNKNOWN",
+          "scheme": "BIS Compulsory Registration Scheme",
+          "verification_status": "DEMO",
+          "notes": "LED lamps are under CRS scheme — verify from BIS portal"
+        }
+      ],
+      "related": [
+        {"target": "IS 16014", "type": "NORMATIVE_REFERENCE"},
+        {"target": "IS 10322", "type": "REFERENCE"}
+      ]
+    },
+    {
+      "standard_number": "IS 277",
+      "title": "Galvanized Steel Sheets (Plain and Corrugated) — Specification",
+      "title_hindi": "जस्तीकृत स्टील शीट (सपाट और नालीदार) — विनिर्देश",
+      "part": null,
+      "edition_year": 2003,
+      "status": "DEMO",
+      "standard_type": "PRODUCT",
+      "sector": "CONSTRUCTION",
+      "description": "Specification for galvanized steel sheets in plain and corrugated form used for roofing, cladding, and other construction applications. Covers zinc coating mass, mechanical properties, and testing.",
+      "description_hindi": "छत और आवरण के लिए जस्तीकृत स्टील शीट के विनिर्देश और परीक्षण आवश्यकताएँ।",
+      "keywords": ["galvanized sheet", "corrugated sheet", "roofing", "steel sheet", "IS 277", "जस्तीकृत शीट"],
+      "scope": "Galvanized steel sheets for roofing and cladding applications.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [
+        {
+          "product_category": "Galvanized Steel Sheets",
+          "certification_type": "ISI_MARK",
+          "is_mandatory": "UNKNOWN",
+          "scheme": "BIS Product Certification",
+          "verification_status": "DEMO"
+        }
+      ],
+      "related": [
+        {"target": "IS 1239", "type": "RELATED_PRODUCT"}
+      ]
+    },
+    {
+      "standard_number": "IS 1852",
+      "title": "Rolling and Cutting Tolerances for Hot Rolled Steel Products — Specification",
+      "title_hindi": "हॉट रोल्ड स्टील उत्पादों के लिए रोलिंग और कटिंग सहिष्णुता — विनिर्देश",
+      "part": null,
+      "edition_year": 1985,
+      "status": "DEMO",
+      "standard_type": "PRODUCT",
+      "sector": "MECHANICAL",
+      "description": "Specification for dimensional tolerances in hot-rolled steel products including plates, sheets, strips, and structural sections.",
+      "description_hindi": "हॉट रोल्ड स्टील उत्पादों के लिए आयामी सहिष्णुता विनिर्देश।",
+      "keywords": ["steel tolerances", "hot rolled", "dimensions", "IS 1852"],
+      "scope": "Dimensional tolerances for hot-rolled steel products.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [],
+      "related": [
+        {"target": "IS 1239", "type": "NORMATIVE_REFERENCE"},
+        {"target": "IS 1786", "type": "NORMATIVE_REFERENCE"}
+      ]
+    },
+    {
+      "standard_number": "IS 2016",
+      "title": "Plain Washers — Specification",
+      "title_hindi": "सादा वाशर — विनिर्देश",
+      "part": null,
+      "edition_year": 1967,
+      "status": "DEMO",
+      "standard_type": "PRODUCT",
+      "sector": "MECHANICAL",
+      "description": "Specification for plain washers covering dimensions, tolerances, material, and finish requirements.",
+      "description_hindi": "सादा वाशर के आयाम, सहिष्णुता और सामग्री आवश्यकताएँ।",
+      "keywords": ["washers", "fasteners", "plain washers", "IS 2016"],
+      "scope": "Plain washers used in mechanical fastening applications.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [],
+      "related": []
+    },
+    {
+      "standard_number": "IS 9000",
+      "title": "Basic Environmental Testing Procedures for Electronic and Electrical Items",
+      "title_hindi": "इलेक्ट्रॉनिक और विद्युत वस्तुओं के लिए बुनियादी पर्यावरण परीक्षण प्रक्रियाएँ",
+      "part": "Part 1",
+      "edition_year": 1977,
+      "status": "DEMO",
+      "standard_type": "TEST_METHOD",
+      "sector": "ELECTRONICS",
+      "description": "Environmental testing procedures for electronic and electrical items covering thermal, humidity, vibration, and other environmental stress tests.",
+      "description_hindi": "विद्युत और इलेक्ट्रॉनिक वस्तुओं के पर्यावरण परीक्षण की बुनियादी प्रक्रियाएँ।",
+      "keywords": ["environmental testing", "electrical testing", "electronic testing", "IS 9000"],
+      "scope": "Environmental test procedures for verification of electronic and electrical equipment.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [],
+      "related": [
+        {"target": "IS 694", "type": "TEST_METHOD"},
+        {"target": "IS 7098", "type": "TEST_METHOD"}
+      ]
+    },
+    {
+      "standard_number": "IS 14846",
+      "title": "Sluice Valves for Water Works Purposes — Specification",
+      "title_hindi": "जल कार्यों के लिए स्लुइस वाल्व — विनिर्देश",
+      "part": null,
+      "edition_year": 2000,
+      "status": "DEMO",
+      "standard_type": "PRODUCT",
+      "sector": "WATER",
+      "description": "Specification for sluice valves (gate valves) used in water distribution systems. Covers design, materials, dimensions, pressure ratings, and testing.",
+      "description_hindi": "जल वितरण प्रणालियों में उपयोग के लिए स्लुइस वाल्व के विनिर्देश।",
+      "keywords": ["sluice valve", "gate valve", "water supply", "valve", "IS 14846"],
+      "scope": "Sluice valves for water works and distribution systems.",
+      "verification_status": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "certifications": [
+        {
+          "product_category": "Water Supply Valves",
+          "certification_type": "ISI_MARK",
+          "is_mandatory": "UNKNOWN",
+          "scheme": "BIS Product Certification",
+          "verification_status": "DEMO"
+        }
+      ],
+      "related": [
+        {"target": "IS 3589", "type": "RELATED_PRODUCT"},
+        {"target": "IS 6392", "type": "REFERENCE"}
+      ]
+    }
+  ],
+  "data_sources": [
+    {
+      "name": "SIH 2026 Demo Dataset",
+      "source_type": "DEMO",
+      "source_url": "https://www.bis.gov.in",
+      "record_count": 25,
+      "verification_status": "DEMO",
+      "notes": "Demo records for SIH 2026 prototype. NOT verified official BIS data. Standard numbers reference real IS numbers but all metadata must be treated as approximate."
+    }
+  ]
+}

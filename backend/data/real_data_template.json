@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "source_name": "Official BIS Gazette / BIS Portal Data",
+    "source_url": "https://www.bis.gov.in",
+    "verification_status": "VERIFIED",
+    "description": "Official standards data verified from authoritative BIS records"
+  },
+  "standards": [
+    {
+      "standard_number": "IS 1239",
+      "title": "Steel Tubes, Tubulars and Other Wrought Steel Fittings — Specification",
+      "title_hindi": "स्टील ट्यूब, ट्यूबुलर और अन्य रॉट स्टील फिटिंग — विनिर्देश",
+      "part": "Part 1",
+      "edition_year": 2004,
+      "status": "CURRENT",
+      "standard_type": "PRODUCT",
+      "sector": "CONSTRUCTION",
+      "description": "Covers requirements for butt welded and seamless screwed and socketed steel tubes and tubulars for water, gas and air lines.",
+      "description_hindi": "जल, गैस और वायु लाइनों के लिए स्टील ट्यूब और ट्यूबुलर की आवश्यकताएं।",
+      "keywords": ["steel tubes", "steel pipes", "water supply", "plumbing", "mild steel"],
+      "scope": "Applies to steel tubes from 6mm to 150mm nominal bore for conveying water, gas, steam and air.",
+      "verification_status": "VERIFIED",
+      "source_url": "https://www.bis.gov.in"
+    }
+  ]
+}

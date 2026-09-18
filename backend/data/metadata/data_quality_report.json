@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-09-18T04:49:59.287548Z",
+  "file_audited": "latest_normalized.json",
+  "total_records": 20,
+  "verified_records": 20,
+  "duplicate_numbers_count": 0,
+  "duplicate_numbers": [],
+  "malformed_numbers_count": 0,
+  "malformed_numbers": [],
+  "missing_titles_count": 0,
+  "missing_source_count": 0,
+  "invalid_urls_count": 0,
+  "missing_verification_status_count": 0,
+  "records_with_version_info": 20,
+  "records_with_amendments": 2,
+  "records_with_related_standards": 13,
+  "records_with_certifications": 19,
+  "records_with_product_manuals": 6,
+  "data_quality_score": 100.0,
+  "is_valid_for_ingestion": true
+}
