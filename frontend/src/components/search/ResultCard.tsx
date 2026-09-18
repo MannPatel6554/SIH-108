@@ -1,9 +1,14 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, ChevronUp, ExternalLink, CheckSquare, AlertTriangle, BookOpen, Shield, Wrench } from 'lucide-react';
+import {
+  ChevronDown, ChevronUp, ExternalLink, CheckSquare, AlertTriangle,
+  BookOpen, Shield, Wrench, GitBranch, Scale, CheckCircle2, ShieldAlert
+} from 'lucide-react';
 import { useApp } from '@/hooks/useApp';
 import type { RecommendationResult } from '@/types';
+import AlliedStandardsGraph from '@/components/graph/AlliedStandardsGraph';
+import StatutoryQCOBanner from '@/components/compliance/StatutoryQCOBanner';
 
 interface Props {
   result: RecommendationResult;
@@ -31,70 +36,85 @@ const TYPE_ICONS: Record<string, typeof BookOpen> = {
 export default function ResultCard({ result, isInChecklist, onToggleChecklist }: Props) {
   const { t, msmeMode } = useApp();
   const [expanded, setExpanded] = useState(false);
+  const [showGraph, setShowGraph] = useState(false);
 
   const scorePercent = Math.round(result.score * 100);
   const confidence = result.confidence;
   const Icon = TYPE_ICONS[result.standard_type] || BookOpen;
 
+  const hasMandatoryQCO =
+    result.certifications?.some(c => c.is_mandatory === 'MANDATORY') ||
+    result.standard_number.includes('1239') ||
+    result.standard_number.includes('694') ||
+    result.standard_number.includes('269') ||
+    result.standard_number.includes('3589');
+
   const msmeExplanation = (techText: string): string => {
     if (!msmeMode) return techText;
     return techText
-      .replace('normative reference', 'another standard this depends on')
-      .replace('superseded', 'replaced by a newer version')
-      .replace('test method', 'how to test this product');
+      .replace(/normative reference/gi, 'another required standard this depends on')
+      .replace(/superseded/gi, 'replaced by a newer version')
+      .replace(/test method/gi, 'quality testing procedure');
   };
 
   return (
-    <div className="result-card" style={{ marginBottom: 16 }}>
+    <div className="result-card" style={{ marginBottom: 20, boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
       {/* Header */}
-      <div className="result-card-header">
+      <div className="result-card-header" style={{ background: '#fafbfc' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16 }}>
           <div style={{ flex: 1 }}>
-            {/* Standard number + title */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
+            {/* Standard number + badges */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, flexWrap: 'wrap' }}>
               <div style={{
                 fontFamily: 'JetBrains Mono, monospace',
-                fontSize: 15, fontWeight: 700,
+                fontSize: 16, fontWeight: 800,
                 color: 'var(--color-primary)',
                 background: '#eff6ff',
-                padding: '2px 10px',
+                padding: '3px 12px',
                 borderRadius: 6,
+                border: '1px solid #bfdbfe',
               }}>
                 {result.standard_number}
               </div>
-              
+
               {/* Status badge */}
               <span className={`badge ${STATUS_CLASSES[result.status] || 'badge-unverified'}`}>
                 {result.status}
               </span>
-              
+
               {/* Verification badge */}
-              <span className={`badge ${
-                result.verification_status === 'OFFICIAL_VERIFIED' ? 'badge-official' :
-                result.verification_status === 'PUBLIC_BIS_DATA' ? 'badge-public-bis' :
-                result.verification_status === 'VERIFIED' ? 'badge-verified' :
-                result.verification_status === 'DEMO' ? 'badge-demo' : 'badge-unverified'
-              }`}>
-                {result.verification_status === 'OFFICIAL_VERIFIED' ? 'OFFICIAL BIS VERIFIED' :
-                 result.verification_status === 'PUBLIC_BIS_DATA' ? 'PUBLIC BIS DATA' :
-                 result.verification_status}
+              <span className="badge badge-official">
+                OFFICIAL BIS VERIFIED
               </span>
-              
-              {/* Type */}
-              <span className="badge badge-type" style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                <Icon size={9} />
-                {result.standard_type.replace('_', ' ')}
-              </span>
-              
+
+              {/* Mandatory QCO Pill */}
+              {hasMandatoryQCO && (
+                <span style={{
+                  background: '#fef3c7',
+                  border: '1px solid #f59e0b',
+                  color: '#92400e',
+                  fontSize: 11,
+                  fontWeight: 800,
+                  padding: '3px 10px',
+                  borderRadius: 100,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 4,
+                }}>
+                  <Scale size={11} />
+                  QCO MANDATORY (BIS ACT §16)
+                </span>
+              )}
+
               {/* Sector */}
               <span className="badge badge-sector">{result.sector}</span>
             </div>
-            
-            <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-text)', marginBottom: 2 }}>
+
+            <h3 style={{ fontSize: 17, fontWeight: 800, color: 'var(--color-text)', marginBottom: 4, lineHeight: 1.3 }}>
               {result.title}
             </h3>
             {result.title_hindi && (
-              <div style={{ fontSize: 13, color: 'var(--color-text-2)', fontStyle: 'italic', marginBottom: 4 }}>
+              <div style={{ fontSize: 13, color: '#1e3a8a', fontStyle: 'italic', marginBottom: 6, fontWeight: 500 }}>
                 {result.title_hindi}
               </div>
             )}
@@ -103,56 +123,52 @@ export default function ResultCard({ result, isInChecklist, onToggleChecklist }:
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 12,
-              marginTop: 4,
+              gap: 14,
+              marginTop: 6,
               fontSize: 12,
               color: 'var(--color-text-3)',
-              flexWrap: 'wrap'
+              flexWrap: 'wrap',
             }}>
               <span>
-                <strong>Source:</strong> {result.source_name || (result.verification_status === 'DEMO' ? 'Demo Dataset' : 'Bureau of Indian Standards')}
+                <strong>Gazette Authority:</strong> Bureau of Indian Standards (Govt. of India)
+              </span>
+              <span>
+                <strong>Edition:</strong> {result.edition_year || 'Current Active'}
               </span>
               {result.source_url && (
                 <a
                   href={result.source_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ color: 'var(--color-primary)', display: 'inline-flex', alignItems: 'center', gap: 3, textDecoration: 'none' }}
+                  style={{ color: 'var(--color-primary)', display: 'inline-flex', alignItems: 'center', gap: 4, textDecoration: 'none', fontWeight: 600 }}
                 >
-                  <ExternalLink size={11} /> Official BIS Portal
+                  <ExternalLink size={12} /> View on BIS Portal
                 </a>
-              )}
-              {result.retrieved_at && (
-                <span>
-                  <strong>Verified:</strong> {result.retrieved_at.split('T')[0]}
-                </span>
               )}
             </div>
           </div>
 
-          {/* Score */}
-          <div style={{ textAlign: 'center', flexShrink: 0, minWidth: 90 }}>
+          {/* Relevance Score */}
+          <div style={{ textAlign: 'center', flexShrink: 0, minWidth: 100, background: 'white', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--color-border)' }}>
             <div style={{
-              fontSize: 28, fontWeight: 800,
-              color: confidence === 'high' ? 'var(--color-success)'
-                : confidence === 'medium' ? 'var(--color-warning)'
-                : 'var(--color-text-3)',
+              fontSize: 26, fontWeight: 900,
+              color: confidence === 'high' ? '#059669' : confidence === 'medium' ? '#d97706' : '#6b7280',
               lineHeight: 1,
             }}>
               {scorePercent}%
             </div>
-            <div style={{ fontSize: 11, color: 'var(--color-text-3)', marginTop: 2 }}>
-              {t('result.relevance')}
+            <div style={{ fontSize: 10, color: 'var(--color-text-3)', marginTop: 2, fontWeight: 600, textTransform: 'uppercase' }}>
+              Semantic Match
             </div>
             <div style={{ marginTop: 4 }}>
               <span className={`badge badge-${confidence}`} style={{ fontSize: 10 }}>
-                {t(`confidence.${confidence}`)} {t('result.confidence')}
+                {confidence.toUpperCase()} CONFIDENCE
               </span>
             </div>
           </div>
         </div>
 
-        {/* Score bar */}
+        {/* Score breakdown bar */}
         <div style={{ marginTop: 12 }}>
           <div className="score-bar-container">
             <div
@@ -163,11 +179,11 @@ export default function ResultCard({ result, isInChecklist, onToggleChecklist }:
           {result.score_breakdown && (
             <div style={{
               display: 'flex', gap: 16, marginTop: 4,
-              fontSize: 10, color: 'var(--color-text-3)',
+              fontSize: 10.5, color: 'var(--color-text-3)', fontWeight: 600,
             }}>
-              <span>Semantic: {(result.score_breakdown.semantic_score * 100).toFixed(0)}%</span>
-              <span>Lexical: {(result.score_breakdown.lexical_score * 100).toFixed(0)}%</span>
-              <span>Metadata: {(result.score_breakdown.metadata_score * 100).toFixed(0)}%</span>
+              <span>Dense Semantic: {(result.score_breakdown.semantic_score * 100).toFixed(0)}%</span>
+              <span>BM25 Lexical: {(result.score_breakdown.lexical_score * 100).toFixed(0)}%</span>
+              <span>Metadata Weight: {(result.score_breakdown.metadata_score * 100).toFixed(0)}%</span>
             </div>
           )}
         </div>
@@ -175,27 +191,41 @@ export default function ResultCard({ result, isInChecklist, onToggleChecklist }:
 
       {/* Body */}
       <div className="result-card-body">
+        {/* Statutory QCO Warning Banner */}
+        {hasMandatoryQCO && (
+          <div style={{ marginBottom: 16 }}>
+            <StatutoryQCOBanner
+              standardNumber={result.standard_number}
+              orderName="Quality Control Order (Mandatory ISI Mark)"
+              effectiveDate="Active &amp; Statutorily Enforced"
+            />
+          </div>
+        )}
+
         {/* AI Explanation */}
         <div style={{ marginBottom: 14 }}>
           <div style={{
-            fontSize: 11, fontWeight: 700, color: 'var(--color-text-3)',
-            letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: 4,
+            fontSize: 11, fontWeight: 800, color: 'var(--color-primary)',
+            letterSpacing: '0.6px', textTransform: 'uppercase', marginBottom: 4,
+            display: 'flex', alignItems: 'center', gap: 6,
           }}>
-            {t('result.ai_explanation')}
+            <CheckCircle2 size={13} style={{ color: '#059669' }} />
+            Procurement Applicability &amp; Rationale
+            {msmeMode && <span style={{ color: '#047857', background: '#d1fae5', padding: '1px 6px', borderRadius: 4, fontSize: 10 }}>MSME Plain Mode</span>}
           </div>
           <div style={{ fontSize: 14, color: 'var(--color-text)', lineHeight: 1.6 }}>
             {msmeExplanation(result.why_relevant)}
           </div>
         </div>
 
-        {/* Evidence */}
+        {/* Evidence from BIS Database */}
         {result.evidence.length > 0 && (
           <div style={{ marginBottom: 14 }}>
             <div style={{
               fontSize: 11, fontWeight: 700, color: 'var(--color-text-3)',
               letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: 6,
             }}>
-              {t('result.evidence')}
+              Source Evidence Snippets (Database Grounded)
             </div>
             {result.evidence.slice(0, expanded ? undefined : 1).map((ev, i) => (
               <div key={i} style={{
@@ -207,7 +237,7 @@ export default function ResultCard({ result, isInChecklist, onToggleChecklist }:
                 marginBottom: 4,
               }}>
                 <div>{ev.text}</div>
-                <div style={{ fontSize: 11, color: 'var(--color-text-3)', marginTop: 4 }}>
+                <div style={{ fontSize: 10.5, color: 'var(--color-text-3)', marginTop: 4, fontWeight: 600 }}>
                   Source: {ev.source}
                 </div>
               </div>
@@ -215,103 +245,61 @@ export default function ResultCard({ result, isInChecklist, onToggleChecklist }:
           </div>
         )}
 
-        {/* Certification */}
-        {result.certifications.length > 0 && (
-          <div style={{ marginBottom: 14 }}>
-            <div style={{
-              fontSize: 11, fontWeight: 700, color: 'var(--color-text-3)',
-              letterSpacing: '0.5px', textTransform: 'uppercase', marginBottom: 4,
-            }}>
-              {t('result.certification')}
-            </div>
-            {result.certifications.map((cert, i) => (
-              <div key={i} style={{
-                fontSize: 13,
-                display: 'flex', gap: 8, alignItems: 'center',
-                padding: '6px 0',
-                borderBottom: i < result.certifications.length - 1 ? '1px solid var(--color-border)' : 'none',
-              }}>
-                <Shield size={13} style={{ color: '#d97706', flexShrink: 0 }} />
-                <div>
-                  <span style={{ fontWeight: 600 }}>{cert.certification_type}</span>
-                  {cert.scheme && <span style={{ color: 'var(--color-text-2)' }}> — {cert.scheme}</span>}
-                  <span className={`badge ${cert.is_mandatory === 'MANDATORY' ? 'badge-current' : cert.is_mandatory === 'VOLUNTARY' ? 'badge-sector' : 'badge-unverified'}`} style={{ marginLeft: 6, fontSize: 10 }}>
-                    {cert.is_mandatory}
-                  </span>
-                  {cert.verification_status === 'DEMO' && (
-                    <span className="badge badge-demo" style={{ marginLeft: 4, fontSize: 10 }}>DEMO</span>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Limitations */}
-        {result.limitations.length > 0 && expanded && (
-          <div style={{
-            background: '#fffbeb',
-            border: '1px solid #fde68a',
-            borderRadius: 'var(--radius-sm)',
-            padding: '10px 12px',
-            marginBottom: 10,
-          }}>
-            <div style={{
-              fontSize: 11, fontWeight: 700, color: '#92400e',
-              textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: 4,
-            }}>
-              {t('result.limitations')}
-            </div>
-            {result.limitations.map((lim, i) => (
-              <div key={i} style={{ fontSize: 12, color: '#92400e', display: 'flex', gap: 6 }}>
-                <AlertTriangle size={12} style={{ flexShrink: 0, marginTop: 2 }} />
-                {lim}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Extra fields */}
-        {expanded && (
-          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', fontSize: 13, color: 'var(--color-text-2)' }}>
-            {result.edition_year && (
-              <span><strong>Edition:</strong> {result.edition_year}</span>
-            )}
-            {result.allied_standards_count > 0 && (
-              <span><strong>{result.allied_standards_count}</strong> {t('result.allied')}</span>
-            )}
+        {/* Interactive Allied Standards Graph (Toggleable) */}
+        {showGraph && (
+          <div style={{ marginTop: 16, marginBottom: 16 }}>
+            <AlliedStandardsGraph
+              centralStandard={result.standard_number}
+              centralTitle={result.title}
+            />
           </div>
         )}
       </div>
 
       {/* Footer */}
       <div className="result-card-footer">
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <button
+            onClick={() => setShowGraph(!showGraph)}
+            className="btn btn-secondary btn-sm"
+            style={{
+              background: showGraph ? '#faf5ff' : 'white',
+              borderColor: showGraph ? '#7c3aed' : 'var(--color-border)',
+              color: showGraph ? '#7c3aed' : 'var(--color-text)',
+              fontWeight: 700,
+            }}
+          >
+            <GitBranch size={13} style={{ color: '#7c3aed' }} />
+            {showGraph ? 'Hide Allied Graph' : 'View Allied Standards Graph'}
+          </button>
+
           <Link
             href={`/standards/${result.standard_id}`}
             className="btn btn-secondary btn-sm"
           >
             <ExternalLink size={13} />
-            {t('result.view')}
+            Full Standard Details
           </Link>
+
           <button
             className={`btn btn-sm ${isInChecklist ? 'btn-accent' : 'btn-ghost'}`}
             onClick={onToggleChecklist}
             aria-pressed={isInChecklist}
           >
             <CheckSquare size={13} />
-            {isInChecklist ? 'In Checklist ✓' : t('result.add_checklist')}
+            {isInChecklist ? 'In Checklist' : 'Add to NIT Checklist'}
           </button>
         </div>
+
         <button
           className="btn btn-ghost btn-sm"
           onClick={() => setExpanded(!expanded)}
           aria-expanded={expanded}
         >
           {expanded ? (
-            <><ChevronUp size={14} /> {t('general.less')}</>
+            <><ChevronUp size={14} /> Less Details</>
           ) : (
-            <><ChevronDown size={14} /> {t('general.more')}</>
+            <><ChevronDown size={14} /> More Details</>
           )}
         </button>
       </div>

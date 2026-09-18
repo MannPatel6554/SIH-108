@@ -147,3 +147,98 @@ async def analyze_document(
         potential_outdated=potential_outdated,
         processing_time_ms=round((time.time() - start) * 1000, 2),
     )
+
+
+@router.post("/analyze-sample-tender", response_model=DocumentAnalysisResponse)
+async def analyze_sample_tender(db: AsyncSession = Depends(get_db)):
+    """
+    Run instant analysis on the official CPWD water supply pipeline sample tender.
+    Demonstrates gap analysis, outdated citations, and missing standards in 1-click.
+    """
+    sample_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "..", "..", "docs", "sample_tender_water_pipeline.pdf")
+    )
+    if not os.path.exists(sample_path):
+        raise HTTPException(status_code=404, detail="Sample tender PDF not found on server")
+
+    start = time.time()
+    processor = get_document_processor()
+    extracted_text, detected_standards = processor.process(sample_path, "pdf")
+
+    # Generate or reuse document record
+    doc = Document(
+        id=str(uuid.uuid4()),
+        filename="CPWD_Tender_WaterSupply_NIT_2024_08.pdf",
+        file_type="pdf",
+        file_size=os.path.getsize(sample_path),
+        status="DONE",
+        extracted_text=extracted_text[:5000],
+        detected_standards=detected_standards,
+        summary="CPWD Tender for Augmentation of Water Supply Pipeline - 2024",
+    )
+    db.add(doc)
+    await db.flush()
+
+    engine = get_recommendation_engine()
+    search_response = await engine.search(
+        query=extracted_text[:2000],
+        db=db,
+        top_k=8,
+        language="en",
+    )
+
+    detected_numbers = [d["standard_number"] for d in detected_standards]
+    potential_outdated = []
+    potential_gaps = []
+
+    for det_std in detected_standards:
+        std_num = det_std["standard_number"]
+        result = await db.execute(
+            select(Standard).where(Standard.standard_number.ilike(f"%{std_num.split()[-1]}%"))
+        )
+        db_std = result.scalars().first()
+        if db_std and det_std.get("year") and db_std.edition_year:
+            if det_std["year"] < db_std.edition_year:
+                potential_outdated.append({
+                    "referenced": f"{std_num} : {det_std['year']}",
+                    "newer_record": f"{db_std.standard_number} : {db_std.edition_year}",
+                    "action": f"Clause defect: Replace superseded {std_num}:{det_std['year']} with current {db_std.standard_number}:{db_std.edition_year} to avoid CVC procurement audit penalty",
+                })
+
+    for rec in search_response.results[:6]:
+        if rec.standard_number not in detected_numbers:
+            potential_gaps.append(
+                f"{rec.standard_number}: {rec.title} (Relevance: {rec.score:.0%}) — Normative/Allied requirement omitted from tender"
+            )
+
+    await db.commit()
+
+    return DocumentAnalysisResponse(
+        document_id=doc.id,
+        filename="CPWD_Tender_WaterSupply_NIT_2024_08.pdf",
+        detected_standards=detected_numbers,
+        extracted_text_preview=extracted_text[:600],
+        recommendations=search_response.results,
+        potential_gaps=potential_gaps,
+        potential_outdated=potential_outdated,
+        processing_time_ms=round((time.time() - start) * 1000, 2),
+    )
+
+
+@router.get("/sample-tender/download")
+async def download_sample_tender():
+    """
+    Download the sample CPWD tender PDF for offline inspection.
+    """
+    from fastapi.responses import FileResponse
+    sample_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "..", "..", "docs", "sample_tender_water_pipeline.pdf")
+    )
+    if not os.path.exists(sample_path):
+        raise HTTPException(status_code=404, detail="Sample tender PDF not found")
+    return FileResponse(
+        path=sample_path,
+        filename="CPWD_Tender_WaterSupply_NIT_2024_08.pdf",
+        media_type="application/pdf"
+    )
+

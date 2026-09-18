@@ -53,6 +53,7 @@ class HybridRetriever:
         self._bm25_corpus: Optional[List] = None
         self._bm25_model = None
         self._corpus_standards: Optional[List[Dict]] = None
+        self._query_cache: Dict[str, Tuple[List[RetrievalCandidate], float]] = {}
 
     def _init_bm25(self, corpus_docs: List[str], corpus_standards: List[Dict]):
         """Initialize BM25 with corpus documents."""
@@ -91,6 +92,13 @@ class HybridRetriever:
         # Normalize query
         normalized_query, lang = normalize_query(query)
         
+        # Check in-memory query cache for sub-millisecond repeat queries
+        cache_key = f"{normalized_query}:{top_k}:{str(filters)}:{s_w}:{l_w}:{m_w}"
+        if cache_key in self._query_cache:
+            cached_candidates, _ = self._query_cache[cache_key]
+            latency_ms = (time.time() - start_time) * 1000
+            return cached_candidates, latency_ms
+
         # Expand n_results for fusion
         expanded_k = min(top_k * 3, 50)
 
@@ -146,6 +154,9 @@ class HybridRetriever:
         )[:top_k]
 
         latency_ms = (time.time() - start_time) * 1000
+        if len(self._query_cache) >= 256:
+            self._query_cache.pop(next(iter(self._query_cache)))
+        self._query_cache[cache_key] = (sorted_candidates, latency_ms)
         return sorted_candidates, latency_ms
 
     def _vector_search(

@@ -4,6 +4,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, ExternalLink, AlertTriangle, GitBranch, Shield, BookOpen } from 'lucide-react';
 import { getStandard } from '@/services/api';
 import type { Standard, RelatedStandard } from '@/types';
+import AlliedStandardsGraph from '@/components/graph/AlliedStandardsGraph';
+import StatutoryQCOBanner from '@/components/compliance/StatutoryQCOBanner';
 
 const REL_COLORS: Record<string, string> = {
   TEST_METHOD: '#fff7ed', NORMATIVE_REFERENCE: '#eff6ff', SAFETY: '#fef2f2',
@@ -234,18 +236,41 @@ export default function StandardDetailPage() {
                 <span className="badge badge-demo">DEMO</span>
               </div>
               {cert.scheme && <div style={{ fontSize: 13, color: 'var(--color-text-2)' }}>Scheme: {cert.scheme}</div>}
-              {cert.notes && <div style={{ fontSize: 13, color: '#92400e', marginTop: 4 }}>⚠ {cert.notes}</div>}
+              {cert.notes && <div style={{ fontSize: 13, color: '#92400e', marginTop: 4 }}>{cert.notes}</div>}
             </div>
           ))}
         </div>
       )}
 
-      {/* Related Standards */}
+      {/* Statutory QCO Warning Banner */}
+      {(standard.standard_number.includes('1239') || standard.standard_number.includes('694') || standard.standard_number.includes('269') || standard.standard_number.includes('3589') || standard.certifications?.some(c => c.is_mandatory === 'MANDATORY')) && (
+        <div style={{ marginBottom: 20 }}>
+          <StatutoryQCOBanner
+            standardNumber={standard.standard_number}
+            orderName="Mandatory Quality Control Order (BIS Act 2016 Section 16)"
+            effectiveDate="Active Statutory Mandate"
+          />
+        </div>
+      )}
+
+      {/* Allied Standards Knowledge Graph */}
+      <div style={{ marginBottom: 24 }}>
+        <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--color-primary)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <GitBranch size={18} style={{ color: '#7c3aed' }} />
+          Interactive Allied Standards Knowledge Graph
+        </h2>
+        <AlliedStandardsGraph
+          centralStandard={standard.standard_number}
+          centralTitle={standard.title}
+        />
+      </div>
+
+      {/* Allied & Related Standards List */}
       {Object.keys(relatedByType).length > 0 && (
         <div className="card" style={{ padding: 24, marginBottom: 20 }}>
           <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-primary)', marginBottom: 16 }}>
             <GitBranch size={15} style={{ display: 'inline', marginRight: 6 }} />
-            Allied & Related Standards
+            Allied &amp; Related Standards Directory
           </h2>
           {Object.entries(relatedByType).map(([type, rels]) => (
             <div key={type} style={{ marginBottom: 16 }}>

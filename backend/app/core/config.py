@@ -22,8 +22,12 @@ class Settings(BaseSettings):
     VECTOR_DB_PATH: str = "./chroma_db"
     COLLECTION_NAME: str = "bis_standards"
 
-    # Embedding
-    EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
+    # Embedding: Use domain fine-tuned model if available, fallback to all-MiniLM-L6-v2
+    EMBEDDING_MODEL: str = (
+        "./models/bis_finetuned_embeddings"
+        if os.path.exists("./models/bis_finetuned_embeddings")
+        else "all-MiniLM-L6-v2"
+    )
 
     # LLM Provider: "ollama", "mock"
     LLM_PROVIDER: str = "mock"

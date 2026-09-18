@@ -237,3 +237,19 @@ class IngestionAudit(Base):
     details = Column(Text, nullable=True)
     snapshot_file = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class User(Base):
+    """User account with Role-Based Access Control (RBAC)"""
+    __tablename__ = "users"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    email = Column(String, unique=True, nullable=False, index=True)
+    full_name = Column(String, nullable=False)
+    password_hash = Column(String, nullable=False)
+    role = Column(String, default="PROCUREMENT_OFFICER", nullable=False)
+    # Roles: PROCUREMENT_OFFICER, TECHNICAL_EXPERT, COMPLIANCE_ADMIN, BIDDER_MSME
+    department = Column(String, nullable=True)
+    organization = Column(String, nullable=True)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)

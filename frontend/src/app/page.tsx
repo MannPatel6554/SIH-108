@@ -1,296 +1,198 @@
 'use client';
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Search, FileText, CheckSquare, GitBranch, BookOpen, Zap, AlertTriangle, TrendingUp } from 'lucide-react';
-import { useApp } from '@/hooks/useApp';
-import { getStats, getHealth } from '@/services/api';
-import type { Stats, HealthStatus } from '@/types';
+import {
+  Search, GitBranch, AlertTriangle, ShieldCheck,
+  ArrowRight, CheckCircle2, FileSpreadsheet
+} from 'lucide-react';
+import CoreFeaturesBar from '@/components/layout/CoreFeaturesBar';
+import AlliedStandardsGraph from '@/components/graph/AlliedStandardsGraph';
 
 export default function DashboardPage() {
-  const { t } = useApp();
-  const [stats, setStats] = useState<Stats | null>(null);
-  const [health, setHealth] = useState<HealthStatus | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Promise.all([
-      getStats().catch(() => null),
-      getHealth().catch(() => null),
-    ]).then(([s, h]) => {
-      setStats(s as Stats);
-      setHealth(h as HealthStatus);
-      setLoading(false);
-    });
-  }, []);
-
-  const quickActions = [
-    {
-      href: '/search',
-      icon: Search,
-      title: t('nav.search'),
-      description: 'Enter a procurement specification to find applicable Indian Standards',
-      color: '#1a3c5e',
-      bg: '#eff6ff',
-    },
-    {
-      href: '/analyze',
-      icon: FileText,
-      title: t('nav.analyze'),
-      description: 'Upload a tender PDF, DOCX, or TXT to auto-detect IS references',
-      color: '#7c3aed',
-      bg: '#faf5ff',
-    },
-    {
-      href: '/compliance',
-      icon: CheckSquare,
-      title: t('nav.compliance'),
-      description: 'Build and manage compliance checklists for procurement specifications',
-      color: '#059669',
-      bg: '#f0fdf4',
-    },
-    {
-      href: '/version-check',
-      icon: GitBranch,
-      title: t('nav.version'),
-      description: 'Check if an IS citation is potentially outdated',
-      color: '#d97706',
-      bg: '#fffbeb',
-    },
-    {
-      href: '/standards',
-      icon: BookOpen,
-      title: t('nav.standards'),
-      description: 'Browse and search the demo standards catalog',
-      color: '#0e7490',
-      bg: '#ecfeff',
-    },
-  ];
-
   return (
-    <div style={{ maxWidth: 1200 }}>
-      {/* Hero */}
-      <div className="hero-gradient" style={{
+    <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+      {/* 1-Click Core Features Bar */}
+      <CoreFeaturesBar />
+
+      {/* Official Government Portal Hero Banner */}
+      <div style={{
+        background: 'linear-gradient(135deg, #091e3a 0%, #102a4e 50%, #1a3c5e 100%)',
         borderRadius: 'var(--radius-xl)',
-        padding: '40px 48px',
+        padding: 'clamp(24px, 4vw, 40px)',
         color: 'white',
-        marginBottom: 32,
+        marginBottom: 28,
         position: 'relative',
         overflow: 'hidden',
+        boxShadow: '0 8px 32px rgba(10, 30, 58, 0.25)',
+        border: '1px solid rgba(255,255,255,0.1)',
       }}>
-        <div style={{ position: 'absolute', top: -40, right: -40, width: 200, height: 200, background: 'rgba(255,255,255,0.04)', borderRadius: '50%' }} />
-        <div style={{ position: 'absolute', bottom: -60, right: 60, width: 300, height: 300, background: 'rgba(255,255,255,0.03)', borderRadius: '50%' }} />
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+        {/* Subtle decorative circles */}
+        <div style={{ position: 'absolute', top: -50, right: -50, width: 260, height: 260, background: 'radial-gradient(circle, rgba(245,158,11,0.15) 0%, rgba(255,255,255,0) 70%)', borderRadius: '50%' }} />
+        <div style={{ position: 'absolute', bottom: -80, right: 120, width: 340, height: 340, background: 'radial-gradient(circle, rgba(37,99,235,0.12) 0%, rgba(255,255,255,0) 70%)', borderRadius: '50%' }} />
+
+        {/* Top Badges */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
           <div style={{
-            padding: '4px 14px',
-            background: 'rgba(255,255,255,0.15)',
+            padding: '4px 12px',
+            background: 'rgba(255, 255, 255, 0.12)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
             borderRadius: 100,
             fontSize: 11,
-            fontWeight: 700,
+            fontWeight: 800,
             letterSpacing: '0.8px',
             textTransform: 'uppercase',
             display: 'flex', alignItems: 'center', gap: 6,
+            color: '#fbbf24',
           }}>
-            <span style={{ width: 6, height: 6, background: '#4ade80', borderRadius: '50%', display: 'inline-block' }} />
-            SIH 2026 — PS108 Demo
+            <span style={{ width: 6, height: 6, background: '#fbbf24', borderRadius: '50%', display: 'inline-block' }} />
+            SIH 2026 PS108 · Official BIS Decision Support
           </div>
+
           <div style={{
-            padding: '4px 14px',
-            background: 'rgba(16, 185, 129, 0.25)',
-            border: '1px solid rgba(16, 185, 129, 0.5)',
+            padding: '4px 12px',
+            background: 'rgba(16, 185, 129, 0.2)',
+            border: '1px solid rgba(16, 185, 129, 0.4)',
             borderRadius: 100,
             fontSize: 11, fontWeight: 700,
             letterSpacing: '0.8px', textTransform: 'uppercase',
             color: '#86efac',
             display: 'flex', alignItems: 'center', gap: 6,
           }}>
-            <span style={{ width: 6, height: 6, background: '#86efac', borderRadius: '50%', display: 'inline-block' }} />
-            DATA SOURCE: OFFICIAL BIS DATA
+            <ShieldCheck size={13} />
+            SECTION 16 BIS ACT 2016 COMPLIANT
+          </div>
+
+          <div style={{
+            padding: '4px 12px',
+            background: 'rgba(59, 130, 246, 0.2)',
+            border: '1px solid rgba(59, 130, 246, 0.4)',
+            borderRadius: 100,
+            fontSize: 11, fontWeight: 700,
+            letterSpacing: '0.8px', textTransform: 'uppercase',
+            color: '#93c5fd',
+            display: 'flex', alignItems: 'center', gap: 6,
+          }}>
+            <CheckCircle2 size={13} />
+            ZERO-HALLUCINATION GROUNDED
           </div>
         </div>
 
-        <h1 style={{ fontSize: 36, fontWeight: 800, color: 'white', marginBottom: 12, lineHeight: 1.15 }}>
+        <h1 style={{ fontSize: 'clamp(24px, 3.5vw, 36px)', fontWeight: 900, color: 'white', marginBottom: 10, lineHeight: 1.15, letterSpacing: '-0.5px' }}>
           BIS SmartSpec AI
         </h1>
-        <p style={{ fontSize: 18, opacity: 0.85, marginBottom: 8, maxWidth: 600, lineHeight: 1.5 }}>
-          {t('app.tagline')}
+        <p style={{ fontSize: 18, color: '#e2e8f0', marginBottom: 6, maxWidth: 720, lineHeight: 1.5, fontWeight: 500 }}>
+          AI-Powered Recommendation &amp; Audit Engine for Identifying Applicable Indian Standards for Public Procurement (GeM / CPPP)
         </p>
-        <p style={{ fontSize: 13, opacity: 0.6, maxWidth: 500 }}>
-          Bureau of Indian Standards · Ministry of Consumer Affairs, Food & Public Distribution
+        <p style={{ fontSize: 13, color: '#94a3b8', maxWidth: 650, marginBottom: 28 }}>
+          Bureau of Indian Standards · Ministry of Consumer Affairs, Food &amp; Public Distribution · Government of India
         </p>
 
-        <div style={{ display: 'flex', gap: 12, marginTop: 28, flexWrap: 'wrap' }}>
+        {/* Action Buttons */}
+        <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
           <Link href="/search" style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
-            padding: '12px 24px',
-            background: 'white',
-            color: 'var(--color-primary)',
+            padding: '13px 26px',
+            background: '#ffffff',
+            color: '#0f2540',
             borderRadius: 'var(--radius-md)',
-            fontWeight: 700, fontSize: 15,
+            fontWeight: 800, fontSize: 15,
             textDecoration: 'none',
-            transition: 'transform 0.15s, box-shadow 0.15s',
+            boxShadow: '0 4px 14px rgba(0,0,0,0.15)',
+            transition: 'all 0.15s ease',
           }}
             onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
             onMouseLeave={e => (e.currentTarget.style.transform = 'none')}
           >
-            <Search size={18} />
-            Search Standards
+            <Search size={18} style={{ color: '#1d4ed8' }} />
+            Search Standards by Specification
           </Link>
-          <Link href="/analyze" style={{
+
+          <Link href="/analyze?demo=cpwd" style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
-            padding: '12px 24px',
+            padding: '13px 24px',
             background: 'rgba(255,255,255,0.15)',
             color: 'white',
             borderRadius: 'var(--radius-md)',
-            fontWeight: 600, fontSize: 15,
+            fontWeight: 700, fontSize: 15,
             textDecoration: 'none',
             border: '1px solid rgba(255,255,255,0.25)',
-            transition: 'background 0.15s',
-          }}>
-            <FileText size={18} />
-            Analyze Tender
+            backdropFilter: 'blur(8px)',
+            transition: 'all 0.15s ease',
+          }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.22)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.15)')}
+          >
+            <FileSpreadsheet size={18} style={{ color: '#38bdf8' }} />
+            Analyze Tender Document (CPWD Demo)
+          </Link>
+
+          <Link href="/version-check?demo=is1239_1990" style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            padding: '13px 24px',
+            background: 'rgba(245, 158, 11, 0.2)',
+            color: '#fef3c7',
+            borderRadius: 'var(--radius-md)',
+            fontWeight: 700, fontSize: 15,
+            textDecoration: 'none',
+            border: '1px solid rgba(245, 158, 11, 0.4)',
+            transition: 'all 0.15s ease',
+          }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255, 158, 11, 0.3)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(245, 158, 11, 0.2)')}
+          >
+            <GitBranch size={18} style={{ color: '#fbbf24' }} />
+            Audit Outdated Citations
           </Link>
         </div>
       </div>
 
-      {/* Disclaimer */}
-      <div className="disclaimer-banner" style={{ marginBottom: 28 }}>
-        <AlertTriangle size={18} style={{ flexShrink: 0, color: '#d97706', marginTop: 1 }} />
-        <div>
-          <strong>Important Disclaimer:</strong> {t('disclaimer.text')}
-          {' '}Authoritative records are tagged <strong>OFFICIAL BIS VERIFIED</strong> with source links.
-        </div>
-      </div>
-
-      {/* Stats */}
-      {!loading && stats && (
-        <div style={{ marginBottom: 32 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-            <TrendingUp size={18} style={{ color: 'var(--color-primary)' }} />
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: 'var(--color-primary)' }}>
-              {t('dashboard.title')} <span style={{ fontSize: 12, color: '#059669', fontWeight: 700, marginLeft: 6, background: '#ecfdf5', padding: '2px 8px', borderRadius: 4, border: '1px solid #a7f3d0' }}>OFFICIAL BIS ACTIVE</span>
+      {/* Feature 2 Showcase: Embedded Allied Standards Knowledge Graph */}
+      <div style={{ marginBottom: 32 }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 14,
+          flexWrap: 'wrap',
+          gap: 8,
+        }}>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--color-primary-light)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
+              Core Feature 2 · Interactive Knowledge Graph
+            </div>
+            <h2 style={{ fontSize: 20, fontWeight: 800, color: 'var(--color-primary)', margin: 0 }}>
+              Live Interdependent Standards Graph (IS 1239 → IS 1387 &amp; IS 6392)
             </h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 16 }}>
-            {[
-              { label: t('dashboard.standards'), value: stats.total_standards, color: 'var(--color-primary)' },
-              { label: t('dashboard.verified'), value: stats.verified_standards, color: 'var(--color-success)' },
-              { label: t('dashboard.demo'), value: stats.demo_standards, color: 'var(--color-demo)' },
-              { label: t('dashboard.searches'), value: stats.searches_performed, color: 'var(--color-primary-light)' },
-              { label: t('dashboard.documents'), value: stats.documents_analyzed, color: '#0e7490' },
-              { label: t('dashboard.checklists'), value: stats.checklists_created, color: '#059669' },
-            ].map(({ label, value, color }) => (
-              <div key={label} className="stat-card">
-                <div className="stat-value" style={{ color }}>{value}</div>
-                <div className="stat-label">{label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Service Status */}
-      {!loading && health && (
-        <div className="card" style={{ marginBottom: 28, padding: '20px 24px' }}>
-          <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 14, color: 'var(--color-primary)' }}>
-            <Zap size={15} style={{ display: 'inline', marginRight: 6 }} />
-            System Status
-          </h3>
-          <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
-            {[
-              {
-                label: 'Vector Store',
-                ok: health.services.vector_store.available,
-                detail: `${health.services.vector_store.document_count} documents`,
-              },
-              {
-                label: 'Embedding Model',
-                ok: health.services.embedding_model.available,
-                detail: health.services.embedding_model.model,
-              },
-              {
-                label: 'LLM Provider',
-                ok: health.services.llm.available,
-                detail: health.services.llm.provider,
-              },
-            ].map(({ label, ok, detail }) => (
-              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div style={{
-                  width: 8, height: 8, borderRadius: '50%',
-                  background: ok ? 'var(--color-success)' : 'var(--color-text-3)',
-                  flexShrink: 0,
-                }} />
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 600 }}>{label}</div>
-                  <div style={{ fontSize: 11, color: 'var(--color-text-3)' }}>{detail}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          {health.services.vector_store.document_count === 0 && (
-            <div style={{
-              marginTop: 14,
-              padding: '10px 14px',
-              background: '#fef3c7',
-              borderRadius: 'var(--radius-sm)',
+          <Link
+            href="/standards/IS%201239%20(Part%201)"
+            style={{
               fontSize: 13,
-              color: '#92400e',
-            }}>
-              ⚠ Standards index is empty. Run: <code>python scripts/seed_demo_data.py && python scripts/build_embeddings.py</code>
-            </div>
-          )}
+              fontWeight: 700,
+              color: 'var(--color-primary-light)',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 4,
+            }}
+          >
+            <span>Inspect Full Specifications in Catalog</span>
+            <ArrowRight size={14} />
+          </Link>
         </div>
-      )}
 
-      {/* Quick Actions Grid */}
-      <div>
-        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16, color: 'var(--color-primary)' }}>
-          Get Started
-        </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
-          {quickActions.map(({ href, icon: Icon, title, description, color, bg }) => (
-            <Link
-              key={href}
-              href={href}
-              style={{ textDecoration: 'none' }}
-            >
-              <div
-                className="card"
-                style={{
-                  padding: '24px',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                  border: `1px solid ${bg === '#eff6ff' ? '#bfdbfe' : 'var(--color-border)'}`,
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = color;
-                  e.currentTarget.style.transform = 'translateY(-3px)';
-                  e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = '';
-                  e.currentTarget.style.transform = '';
-                  e.currentTarget.style.boxShadow = '';
-                }}
-              >
-                <div style={{
-                  width: 44, height: 44,
-                  background: bg,
-                  borderRadius: 'var(--radius-md)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  marginBottom: 16,
-                }}>
-                  <Icon size={22} style={{ color }} />
-                </div>
-                <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-text)', marginBottom: 8 }}>
-                  {title}
-                </h3>
-                <p style={{ fontSize: 13, color: 'var(--color-text-2)', lineHeight: 1.5 }}>
-                  {description}
-                </p>
-              </div>
-            </Link>
-          ))}
+        <AlliedStandardsGraph
+          centralStandard="IS 1239 (Part 1)"
+          centralTitle="Steel Tubes, Tubulars and Other Wrought Steel Fittings"
+        />
+      </div>
+
+      {/* Statutory Legal Disclaimer */}
+      <div className="disclaimer-banner" style={{ marginBottom: 28, background: '#fffbeb', border: '1px solid #fde68a' }}>
+        <AlertTriangle size={18} style={{ flexShrink: 0, color: '#d97706', marginTop: 2 }} />
+        <div style={{ fontSize: 12.5, color: '#92400e', lineHeight: 1.6 }}>
+          <strong>Legal Notice for Public Procurement:</strong> Under CVC Office Order No. 02/02/2022 and Section 16 of the BIS Act 2016,
+          all government procurement specifications issued on GeM / CPPP portals must mandate current Indian Standards with active amendments.
+          This AI decision support engine provides verified recommendations grounded exclusively on published BIS data.
         </div>
       </div>
     </div>

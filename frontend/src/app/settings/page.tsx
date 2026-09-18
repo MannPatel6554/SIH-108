@@ -38,7 +38,7 @@ export default function SettingsPage() {
                 className={`btn ${language === lang ? 'btn-primary' : 'btn-secondary'}`}
                 onClick={() => setLanguage(lang)}
               >
-                {lang === 'en' ? '🇬🇧 English' : '🇮🇳 हिंदी'}
+                {lang === 'en' ? 'English' : 'हिंदी'}
               </button>
             ))}
           </div>
@@ -50,7 +50,7 @@ export default function SettingsPage() {
             className={`btn ${msmeMode ? 'btn-accent' : 'btn-secondary'}`}
             onClick={() => setMsmeMode(!msmeMode)}
           >
-            {msmeMode ? '✓ MSME Mode Enabled' : 'Enable MSME Mode'}
+            {msmeMode ? 'MSME Mode Enabled' : 'Enable MSME Mode'}
           </button>
           <div style={{ fontSize: 13, color: 'var(--color-text-2)', marginTop: 8 }}>
             Simplifies technical jargon for small and medium enterprises.

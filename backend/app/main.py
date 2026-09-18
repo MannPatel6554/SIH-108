@@ -15,7 +15,7 @@ from loguru import logger
 
 from app.core.config import settings
 from app.models.session import init_db
-from app.api import search, standards, documents, utilities
+from app.api import search, standards, documents, utilities, auth
 
 
 @asynccontextmanager
@@ -166,6 +166,7 @@ async def health():
 
 # ── Register routers
 prefix = settings.API_PREFIX
+app.include_router(auth.router, prefix=prefix)
 app.include_router(search.router, prefix=prefix)
 app.include_router(standards.router, prefix=prefix)
 app.include_router(documents.router, prefix=prefix)

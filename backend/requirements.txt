@@ -16,7 +16,7 @@ pydantic-settings==2.5.2
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch==2.5.1+cpu
 sentence-transformers==3.1.1
-chromadb==0.5.15
+# chromadb is optional; if C++ build tools are missing, NumpyVectorStore is used automatically
 
 # Document Processing
 pypdf==5.0.1

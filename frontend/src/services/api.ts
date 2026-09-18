@@ -86,6 +86,14 @@ export async function analyzeDocument(file: File) {
   return response.json();
 }
 
+export async function analyzeSampleTender() {
+  return apiRequest('/analyze-sample-tender', {
+    method: 'POST',
+    body: JSON.stringify({}),
+  });
+}
+
+
 // ─── Version Check ────────────────────────────────────────────────────────────
 
 export async function checkVersion(request: {

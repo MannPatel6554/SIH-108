@@ -1,8 +1,13 @@
 'use client';
-import { useState } from 'react';
-import { Plus, Trash2, CheckCircle, Clock, XCircle, Download, Loader2 } from 'lucide-react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import {
+  Plus, Trash2, CheckCircle, Clock, XCircle, Download, Loader2,
+  Scale, ShieldAlert, CheckCircle2, Award, FileSpreadsheet, ExternalLink
+} from 'lucide-react';
 import { createChecklist, exportPDF, exportExcel } from '@/services/api';
 import type { ComplianceChecklist, ComplianceItem } from '@/types';
+import StatutoryQCOBanner from '@/components/compliance/StatutoryQCOBanner';
 
 const ITEM_TYPES = [
   'PRODUCT_STANDARD', 'TEST_METHOD', 'SAFETY', 'INSTALLATION',
@@ -10,13 +15,13 @@ const ITEM_TYPES = [
 ];
 
 const ITEM_TYPE_LABELS: Record<string, string> = {
-  PRODUCT_STANDARD: '☐ Applicable product standard',
-  TEST_METHOD: '☐ Relevant test method',
-  SAFETY: '☐ Safety requirements',
-  INSTALLATION: '☐ Installation requirements',
-  CERTIFICATION: '☐ Certification requirement',
-  VERSION: '☐ Latest edition verified',
-  SPECIFICATION: '☐ Tender specification cross-checked',
+  PRODUCT_STANDARD: 'Applicable product standard',
+  TEST_METHOD: 'Relevant test method',
+  SAFETY: 'Safety requirements',
+  INSTALLATION: 'Installation requirements',
+  CERTIFICATION: 'Certification requirement',
+  VERSION: 'Latest edition verified',
+  SPECIFICATION: 'Tender specification cross-checked',
 };
 
 const STATUS_CONFIG = {
@@ -25,15 +30,27 @@ const STATUS_CONFIG = {
   NOT_APPLICABLE: { icon: XCircle, color: '#6b7280', label: 'N/A', bg: '#f9fafb' },
 };
 
-export default function CompliancePage() {
+function ComplianceContent() {
+  const searchParams = useSearchParams();
   const [items, setItems] = useState<Omit<ComplianceItem, 'id' | 'created_at'>[]>([
-    { standard_number: '', standard_title: '', item_type: 'PRODUCT_STANDARD', status: 'PENDING' },
+    { standard_number: 'IS 1239 (Part 1): 2004', standard_title: 'Mild Steel Tubes for Water Mains', item_type: 'PRODUCT_STANDARD', status: 'VERIFIED' },
+    { standard_number: 'IS 1387: 2003', standard_title: 'General Requirements for Supply of Metallurgical Materials', item_type: 'TEST_METHOD', status: 'VERIFIED' },
+    { standard_number: 'IS 6392: 2020', standard_title: 'Steel Pipe Flanges for Water Pipelines', item_type: 'INSTALLATION', status: 'PENDING' },
+    { standard_number: 'Section 16 BIS Act', standard_title: 'Mandatory BIS Scheme-I (ISI Mark) Certification License', item_type: 'CERTIFICATION', status: 'PENDING' },
   ]);
-  const [name, setName] = useState('');
-  const [query, setQuery] = useState('');
+  const [name, setName] = useState('NIT Pipeline QCO Compliance Audit');
+  const [query, setQuery] = useState('Steel pipes and allied flange fittings for water supply');
   const [saved, setSaved] = useState<ComplianceChecklist | null>(null);
   const [saving, setSaving] = useState(false);
   const [exportLoading, setExportLoading] = useState<'pdf' | 'excel' | null>(null);
+
+  useEffect(() => {
+    const demo = searchParams.get('demo');
+    if (demo === 'qco') {
+      setName('Water Pipeline Tender QCO Statutory Verification');
+      setQuery('IS 1239 & Allied Standards Mandatory QCO Compliance');
+    }
+  }, [searchParams]);
 
   const addItem = () => {
     setItems(prev => [...prev, {
@@ -99,12 +116,43 @@ export default function CompliancePage() {
   };
 
   return (
-    <div style={{ maxWidth: 800 }}>
+    <div style={{ maxWidth: 960, margin: '0 auto' }}>
+      {/* Masthead */}
       <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 6 }}>Compliance Checklist</h1>
-        <p style={{ color: 'var(--color-text-2)', fontSize: 15 }}>
-          Build and track compliance requirements for procurement specifications. Export as PDF or Excel.
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <span style={{
+            background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+            color: 'white',
+            padding: '2px 8px',
+            borderRadius: 4,
+            fontSize: 10.5,
+            fontWeight: 800,
+            letterSpacing: '0.8px',
+          }}>
+            MODULE 04
+          </span>
+          <span style={{ fontSize: 12, color: '#047857', fontWeight: 700 }}>
+            Statutory Enforcement Matrix &amp; Procurement Verification
+          </span>
+        </div>
+        <h1 style={{ fontSize: 28, fontWeight: 900, color: 'var(--color-primary)', marginBottom: 6 }}>
+          Statutory QCO Matrix &amp; Compliance Checklist
+        </h1>
+        <p style={{ color: 'var(--color-text-2)', fontSize: 15, lineHeight: 1.5 }}>
+          Enforce compliance with mandatory Quality Control Orders (QCO) issued under Section 16 of the BIS Act, 2016.
+          Track verification status and export audit-ready compliance certificates for GeM and CPPP tenders.
         </p>
+      </div>
+
+      {/* Statutory QCO Banner */}
+      <div style={{ marginBottom: 24 }}>
+        <StatutoryQCOBanner
+          standardNumber="Section 16 BIS Act 2016 Procurement Mandate"
+          orderName="Mandatory Quality Control Orders issued by Line Ministries"
+          gazetteRef="DoCA / DPIIT / Ministry of Steel / MeitY Gazette Notifications"
+          effectiveDate="Statutorily Binding on All Public Procurements"
+          scheme="Scheme-I (ISI Mark) & CRS Certification"
+        />
       </div>
 
       {saved && (
@@ -115,34 +163,35 @@ export default function CompliancePage() {
           display: 'flex', alignItems: 'center', gap: 8,
         }}>
           <CheckCircle size={16} />
-          <span>Checklist saved! ID: <code style={{ fontFamily: 'monospace' }}>{saved.id.slice(0, 8)}...</code></span>
-          <button className="btn btn-ghost btn-sm" onClick={() => setSaved(null)} style={{ marginLeft: 'auto' }}>
-            New Checklist
+          <span>Compliance record stored! Audit Reference: <code style={{ fontFamily: 'monospace', fontWeight: 700 }}>{saved.id.slice(0, 8)}...</code></span>
+          <button className="btn btn-ghost btn-sm" onClick={() => setSaved(null)} style={{ marginLeft: 'auto', fontWeight: 700 }}>
+            Create Another Audit
           </button>
         </div>
       )}
 
-      {/* Header Info */}
+      {/* Header Form */}
       <div className="card" style={{ padding: 20, marginBottom: 20 }}>
-        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-          <div style={{ flex: 1, minWidth: 200 }}>
-            <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-2)', display: 'block', marginBottom: 4 }}>
-              Checklist Name
+        <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+          <div style={{ flex: 1, minWidth: 220 }}>
+            <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--color-text)', display: 'block', marginBottom: 4 }}>
+              Checklist Title
             </label>
             <input
               className="input"
-              placeholder="e.g., Steel Pipes Procurement Checklist"
+              style={{ fontWeight: 600 }}
+              placeholder="e.g., Water Supply Pipeline NIT Audit"
               value={name}
               onChange={e => setName(e.target.value)}
             />
           </div>
-          <div style={{ flex: 1, minWidth: 200 }}>
-            <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-2)', display: 'block', marginBottom: 4 }}>
-              Related Query / Specification
+          <div style={{ flex: 1.4, minWidth: 240 }}>
+            <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--color-text)', display: 'block', marginBottom: 4 }}>
+              Tender Specification Subject
             </label>
             <input
               className="input"
-              placeholder="e.g., steel pipes for water supply"
+              placeholder="e.g., steel pipes and allied flanges for water distribution"
               value={query}
               onChange={e => setQuery(e.target.value)}
             />
@@ -151,23 +200,14 @@ export default function CompliancePage() {
       </div>
 
       {/* Checklist Items */}
-      <div style={{ marginBottom: 16 }}>
+      <div style={{ marginBottom: 24 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 700 }}>Checklist Items ({items.length})</h2>
-          <button className="btn btn-ghost btn-sm" onClick={addItem}>
+          <h2 style={{ fontSize: 16, fontWeight: 800, color: 'var(--color-primary)' }}>
+            Statutory Verification Items ({items.length})
+          </h2>
+          <button className="btn btn-secondary btn-sm" onClick={addItem} style={{ fontWeight: 700 }}>
             <Plus size={14} /> Add Item
           </button>
-        </div>
-
-        {/* Legend */}
-        <div style={{ display: 'flex', gap: 12, marginBottom: 12, fontSize: 12, color: 'var(--color-text-2)' }}>
-          {Object.entries(STATUS_CONFIG).map(([key, { icon: Icon, color, label }]) => (
-            <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <Icon size={12} style={{ color }} />
-              <span>{label}</span>
-            </div>
-          ))}
-          <span style={{ color: 'var(--color-text-3)' }}>Click status icon to cycle</span>
         </div>
 
         {items.map((item, idx) => {
@@ -181,99 +221,104 @@ export default function CompliancePage() {
                 marginBottom: 8,
                 background: statusConfig.bg,
                 borderColor: item.status === 'VERIFIED' ? '#bbf7d0' : item.status === 'NOT_APPLICABLE' ? '#e5e7eb' : 'var(--color-border)',
+                alignItems: 'center',
               }}
             >
               {/* Status button */}
               <button
                 onClick={() => cycleStatus(idx)}
                 style={{
-                  background: 'none', border: 'none', cursor: 'pointer', padding: 0,
-                  flexShrink: 0, marginTop: 2,
+                  background: 'none', border: 'none', cursor: 'pointer', padding: 4,
+                  flexShrink: 0,
                 }}
-                title={`Status: ${item.status} — click to change`}
+                title={`Status: ${item.status} — click to cycle`}
                 aria-label={`Toggle status for item ${idx + 1}`}
               >
-                <StatusIcon size={20} style={{ color: statusConfig.color }} />
+                <StatusIcon size={22} style={{ color: statusConfig.color }} />
               </button>
 
-              <div style={{ flex: 1, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                <div style={{ minWidth: 150 }}>
-                  <select
-                    className="input"
-                    style={{ padding: '6px 10px', fontSize: 12, width: '100%' }}
-                    value={item.item_type}
-                    onChange={e => updateItem(idx, { item_type: e.target.value as ComplianceItem['item_type'] })}
-                  >
-                    {ITEM_TYPES.map(t => (
-                      <option key={t} value={t}>{ITEM_TYPE_LABELS[t] || t}</option>
-                    ))}
-                  </select>
-                </div>
-                <div style={{ flex: 1, minWidth: 100 }}>
+              <div style={{ flex: 1, display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+                <div style={{ minWidth: 160 }}>
                   <input
                     className="input"
-                    style={{ padding: '6px 10px', fontSize: 12 }}
-                    placeholder="IS number (e.g., IS 1239)"
+                    style={{ padding: '6px 10px', fontSize: 13, fontFamily: 'monospace', fontWeight: 700 }}
+                    placeholder="Standard Number"
                     value={item.standard_number || ''}
                     onChange={e => updateItem(idx, { standard_number: e.target.value })}
                   />
                 </div>
-                <div style={{ flex: 2, minWidth: 140 }}>
+                <div style={{ flex: 1, minWidth: 200 }}>
                   <input
                     className="input"
-                    style={{ padding: '6px 10px', fontSize: 12 }}
-                    placeholder="Standard title (optional)"
+                    style={{ padding: '6px 10px', fontSize: 13 }}
+                    placeholder="Standard Description / Requirement"
                     value={item.standard_title || ''}
                     onChange={e => updateItem(idx, { standard_title: e.target.value })}
                   />
                 </div>
+                <select
+                  className="input"
+                  style={{ width: 170, padding: '6px 10px', fontSize: 12, fontWeight: 600 }}
+                  value={item.item_type}
+                  onChange={e => updateItem(idx, { item_type: e.target.value })}
+                >
+                  {ITEM_TYPES.map(type => (
+                    <option key={type} value={type}>{ITEM_TYPE_LABELS[type] || type}</option>
+                  ))}
+                </select>
               </div>
 
               <button
-                className="btn btn-ghost btn-icon"
                 onClick={() => removeItem(idx)}
-                aria-label="Remove item"
-                style={{ flexShrink: 0, padding: 4 }}
+                style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  color: 'var(--color-text-3)', padding: 4,
+                }}
+                title="Remove Item"
               >
-                <Trash2 size={14} style={{ color: '#dc2626' }} />
+                <Trash2 size={16} />
               </button>
             </div>
           );
         })}
-
-        <button className="btn btn-secondary btn-sm" onClick={addItem} style={{ marginTop: 8 }}>
-          <Plus size={14} /> Add Item
-        </button>
       </div>
 
-      {/* Actions */}
-      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-        <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
-          {saving ? <Loader2 size={14} style={{ animation: 'spin 0.7s linear infinite' }} /> : <CheckCircle size={14} />}
-          Save Checklist
+      {/* Save & Export Actions */}
+      <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+        <button
+          className="btn btn-secondary"
+          onClick={() => handleExport('pdf')}
+          disabled={exportLoading !== null}
+        >
+          {exportLoading === 'pdf' ? <Loader2 size={15} style={{ animation: 'spin 0.7s linear infinite' }} /> : <Download size={15} />}
+          Export Audit PDF
         </button>
-        <button className="btn btn-secondary" onClick={() => handleExport('pdf')} disabled={exportLoading !== null}>
-          {exportLoading === 'pdf' ? <Loader2 size={14} style={{ animation: 'spin 0.7s linear infinite' }} /> : <Download size={14} />}
-          Export PDF
-        </button>
-        <button className="btn btn-secondary" onClick={() => handleExport('excel')} disabled={exportLoading !== null}>
-          {exportLoading === 'excel' ? <Loader2 size={14} style={{ animation: 'spin 0.7s linear infinite' }} /> : <Download size={14} />}
+        <button
+          className="btn btn-secondary"
+          onClick={() => handleExport('excel')}
+          disabled={exportLoading !== null}
+        >
+          {exportLoading === 'excel' ? <Loader2 size={15} style={{ animation: 'spin 0.7s linear infinite' }} /> : <Download size={15} />}
           Export Excel
         </button>
-      </div>
-
-      {/* Summary */}
-      <div style={{ marginTop: 20, display: 'flex', gap: 16 }}>
-        {Object.entries(STATUS_CONFIG).map(([key, { color, label }]) => {
-          const count = items.filter(i => i.status === key).length;
-          return (
-            <div key={key} style={{ fontSize: 14 }}>
-              <strong style={{ color }}>{count}</strong>
-              <span style={{ color: 'var(--color-text-2)', marginLeft: 4 }}>{label}</span>
-            </div>
-          );
-        })}
+        <button
+          className="btn btn-primary"
+          onClick={handleSave}
+          disabled={saving}
+          style={{ fontWeight: 800 }}
+        >
+          {saving ? <Loader2 size={15} style={{ animation: 'spin 0.7s linear infinite' }} /> : <CheckCircle2 size={15} />}
+          Save Compliance Record
+        </button>
       </div>
     </div>
+  );
+}
+
+export default function CompliancePage() {
+  return (
+    <Suspense fallback={<div style={{ padding: 40, textAlign: 'center' }}>Loading Compliance Matrix...</div>}>
+      <ComplianceContent />
+    </Suspense>
   );
 }
