@@ -49,6 +49,14 @@ async def lifespan(app: FastAPI):
     else:
         logger.warning("Vector store not available — semantic search will be limited")
 
+    # Pre-warm embedding service so first health/search requests respond instantly
+    from app.services.embedding_service import get_embedding_service
+    emb = get_embedding_service()
+    if emb.is_available:
+        logger.info(f"Embedding model ready — {emb.model_name}")
+    else:
+        logger.warning("Embedding service not available — fallback mode active")
+
     yield  # Application runs here
 
     # ── Shutdown
@@ -73,13 +81,25 @@ app = FastAPI(
 )
 
 # ── CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS + ["*"],  # Relaxed for demo
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+cors_origins = [str(o).strip() for o in settings.CORS_ORIGINS if str(o).strip()]
+if "*" in cors_origins:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=False,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+else:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=cors_origins,
+        allow_origin_regex=r"https?://.*",
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
 
 
 # ── Request logging middleware

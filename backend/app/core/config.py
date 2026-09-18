@@ -1,9 +1,12 @@
 """
 BIS SmartSpec AI - Application Configuration
 """
+from typing import List, Union
+from pydantic import field_validator
 from pydantic_settings import BaseSettings
 from functools import lru_cache
 import os
+
 
 
 class Settings(BaseSettings):
@@ -38,7 +41,26 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = "./uploads"
 
     # CORS
-    CORS_ORIGINS: list = ["http://localhost:3000", "http://localhost:3001", "http://127.0.0.1:3000"]
+    CORS_ORIGINS: Union[List[str], str] = [
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "http://127.0.0.1:3000",
+    ]
+
+    @field_validator("CORS_ORIGINS", mode="after")
+    @classmethod
+    def validate_cors_origins(cls, v) -> List[str]:
+        if isinstance(v, str):
+            v = v.strip()
+            if v.startswith("[") and v.endswith("]"):
+                import json
+                try:
+                    return json.loads(v)
+                except Exception:
+                    pass
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
+        return list(v)
+
 
     # API
     API_PREFIX: str = "/api"

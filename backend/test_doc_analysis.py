@@ -25,4 +25,6 @@ async def test():
         print("Potential gaps count:", len(data.get('potential_gaps', [])))
         print("DOCUMENT ANALYSIS VERIFIED SUCCESSFULLY!")
 
-asyncio.run(test())
+if __name__ == "__main__":
+    asyncio.run(test())
+

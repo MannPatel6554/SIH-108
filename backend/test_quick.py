@@ -50,4 +50,6 @@ async def test():
         print('Data sources status:', r8.status_code)
         print('ALL TESTS PASSED!')
 
-asyncio.run(test())
+if __name__ == "__main__":
+    asyncio.run(test())
+
