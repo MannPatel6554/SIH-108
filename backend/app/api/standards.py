@@ -9,7 +9,7 @@ from sqlalchemy.orm import selectinload
 
 from app.models.session import get_db
 from app.models.database import Standard, StandardRelationship
-from app.schemas.schemas import StandardSummary, StandardDetail, RelatedStandardSchema
+from app.schemas.schemas import StandardSummary, StandardDetail, RelatedStandardSchema, StandardClauseSchema
 
 router = APIRouter(prefix="/standards", tags=["standards"])
 
@@ -165,6 +165,22 @@ async def get_related_standards(
         for r in relationships
         if r.target
     ]
+
+@router.get("/{id}/clauses", response_model=List[StandardClauseSchema])
+async def get_standard_clauses(
+    id: str,
+    db: AsyncSession = Depends(get_db),
+):
+    """Deep Spec Search: Retrieve technical clauses and engineering tolerances for a standard."""
+    from app.models.database import StandardClause
+    res_std = await db.execute(select(Standard).where(or_(Standard.id == id, Standard.standard_number == id)))
+    std = res_std.scalars().first()
+    if not std:
+        raise HTTPException(status_code=404, detail=f"Standard not found: {id}")
+    
+    stmt = select(StandardClause).where(StandardClause.standard_id == std.id).order_by(StandardClause.clause_number)
+    res = await db.execute(stmt)
+    return res.scalars().all()
 
 
 @router.get("/sources/provenance")

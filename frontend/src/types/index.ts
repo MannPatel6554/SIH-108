@@ -4,6 +4,7 @@ export interface ScoreBreakdown {
   semantic_score: number;
   lexical_score: number;
   metadata_score: number;
+  cross_encoder_score?: number;
   final_score: number;
 }
 
@@ -42,6 +43,21 @@ export interface RecommendationResult {
   limitations: string[];
   certifications: CertificationInfo[];
   allied_standards_count: number;
+  allied_bundle?: Array<{
+    id: string;
+    standard_number: string;
+    title: string;
+    relationship_type: string;
+    description?: string;
+    status?: string;
+  }>;
+  matched_clauses?: Array<{
+    clause_number: string;
+    clause_title: string;
+    clause_text: string;
+    key_tolerances?: string;
+  }>;
+  thesaurus_source?: string;
   source_name?: string;
   source_url?: string;
   source_type?: string;

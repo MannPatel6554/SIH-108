@@ -71,6 +71,7 @@ class Standard(Base):
         foreign_keys="StandardRelationship.target_id",
         back_populates="target"
     )
+    clauses = relationship("StandardClause", back_populates="standard", cascade="all, delete-orphan")
 
 
 class StandardVersion(Base):
@@ -252,4 +253,35 @@ class User(Base):
     department = Column(String, nullable=True)
     organization = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class StandardClause(Base):
+    """Specific technical clause/specification chunk of a standard for Deep Spec Search"""
+    __tablename__ = "standard_clauses"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    standard_id = Column(String, ForeignKey("standards.id"), nullable=False, index=True)
+    standard_number = Column(String, nullable=False, index=True)
+    clause_number = Column(String, nullable=False)  # e.g., "Clause 4.1", "Clause 7.2", "Clause 9.1"
+    clause_title = Column(String, nullable=False)  # e.g., "Tensile and Elongation", "Galvanizing Coating Mass"
+    clause_text = Column(Text, nullable=False)
+    key_tolerances = Column(String, nullable=True)  # e.g., "Min 360 g/m2 zinc, 5 MPa pressure"
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    standard = relationship("Standard", back_populates="clauses")
+
+
+class SearchFeedback(Base):
+    """Procurement Officer / Bidder feedback on retrieval relevance for Active Learning & Fine-Tuning"""
+    __tablename__ = "search_feedback"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    query = Column(String, nullable=False, index=True)
+    standard_id = Column(String, ForeignKey("standards.id"), nullable=False, index=True)
+    standard_number = Column(String, nullable=False)
+    is_relevant = Column(Boolean, default=True)  # True = helpful/selected, False = irrelevant
+    rating = Column(Integer, default=5)  # 1 to 5
+    user_comment = Column(Text, nullable=True)
+    user_role = Column(String, default="PROCUREMENT_OFFICER")
     created_at = Column(DateTime, default=datetime.utcnow)

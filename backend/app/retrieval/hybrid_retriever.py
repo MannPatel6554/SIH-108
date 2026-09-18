@@ -12,12 +12,15 @@ from typing import List, Dict, Any, Optional, Tuple
 from dataclasses import dataclass
 import math
 import time
+import re
 from loguru import logger
 
 from app.core.config import settings
 from app.services.embedding_service import get_embedding_service
 from app.services.vector_store import get_vector_store
 from app.utils.language import normalize_query
+from app.utils.thesaurus import resolve_thesaurus
+from app.retrieval.cross_encoder_reranker import get_cross_encoder_reranker
 
 
 @dataclass
@@ -31,25 +34,26 @@ class RetrievalCandidate:
     semantic_score: float = 0.0
     lexical_score: float = 0.0
     metadata_score: float = 0.0
+    cross_encoder_score: float = 0.0
     final_score: float = 0.0
+    thesaurus_source: Optional[str] = None
+    matched_clauses: List[Dict[str, Any]] = None
+
+    def __post_init__(self):
+        if self.matched_clauses is None:
+            self.matched_clauses = []
 
 
 class HybridRetriever:
     """
-    Hybrid retrieval combining vector search + BM25 + metadata matching.
-    
-    Scoring formula:
-        final_score = (semantic_score * semantic_weight) 
-                    + (lexical_score * lexical_weight) 
-                    + (metadata_score * metadata_weight)
-    
-    Weights are configurable via Settings.
-    Note: These weights are reasonable defaults, not statistically calibrated values.
+    Hybrid retrieval combining vector search + BM25 + metadata matching
+    with Stage 2 Cross-Encoder joint re-ranking.
     """
 
     def __init__(self):
         self.embedding_service = get_embedding_service()
         self.vector_store = get_vector_store()
+        self.reranker = get_cross_encoder_reranker()
         self._bm25_corpus: Optional[List] = None
         self._bm25_model = None
         self._corpus_standards: Optional[List[Dict]] = None
@@ -77,7 +81,7 @@ class HybridRetriever:
         metadata_weight: Optional[float] = None,
     ) -> Tuple[List[RetrievalCandidate], float]:
         """
-        Perform hybrid retrieval.
+        Perform two-stage hybrid retrieval with Cross-Encoder re-ranking.
         
         Returns:
             (candidates_sorted_by_score, latency_ms)
@@ -89,8 +93,11 @@ class HybridRetriever:
         l_w = lexical_weight if lexical_weight is not None else settings.LEXICAL_WEIGHT
         m_w = metadata_weight if metadata_weight is not None else settings.METADATA_WEIGHT
 
+        # 0. Check CPWD DSR & GeM Thesaurus
+        expanded_query, targeted_standards, thesaurus_info = resolve_thesaurus(query)
+
         # Normalize query
-        normalized_query, lang = normalize_query(query)
+        normalized_query, lang = normalize_query(expanded_query)
         
         # Check in-memory query cache for sub-millisecond repeat queries
         cache_key = f"{normalized_query}:{top_k}:{str(filters)}:{s_w}:{l_w}:{m_w}"
@@ -99,10 +106,10 @@ class HybridRetriever:
             latency_ms = (time.time() - start_time) * 1000
             return cached_candidates, latency_ms
 
-        # Expand n_results for fusion
-        expanded_k = min(top_k * 3, 50)
+        # Expand n_results for first-stage retrieval
+        expanded_k = min(max(top_k * 3, 20), 50)
 
-        # 1. Vector Search
+        # 1. Vector Search (Bi-Encoder)
         vector_results = self._vector_search(normalized_query, expanded_k, filters)
         
         # 2. Merge candidates
@@ -118,6 +125,7 @@ class HybridRetriever:
                 document_text=vr.get("document", ""),
                 metadata=meta,
                 semantic_score=vr["similarity"],
+                thesaurus_source=thesaurus_info.get("source") if thesaurus_info else None,
             )
 
         # 3. BM25 Lexical Search (against in-memory corpus from vector results)
@@ -134,11 +142,18 @@ class HybridRetriever:
                     if i < len(scores):
                         cand.lexical_score = scores[i] / max_score
 
-        # 4. Metadata Score
+        # 4. Metadata Score & Targeted Standards Boost
         for cand in candidates.values():
-            cand.metadata_score = self._metadata_score(query, cand.metadata, filters)
+            base_meta = self._metadata_score(query, cand.metadata, filters)
+            # Targeted boost if matched in CPWD DSR / GeM Thesaurus
+            if targeted_standards:
+                for ts in targeted_standards:
+                    if ts.lower() in cand.standard_number.lower() or cand.standard_number.lower() in ts.lower():
+                        base_meta = min(1.0, base_meta + 0.45)
+                        break
+            cand.metadata_score = base_meta
 
-        # 5. Final score
+        # 5. Stage 1 Fusion Score
         for cand in candidates.values():
             cand.final_score = (
                 cand.semantic_score * s_w
@@ -146,18 +161,19 @@ class HybridRetriever:
                 + cand.metadata_score * m_w
             )
 
-        # 6. Sort and return top_k
-        sorted_candidates = sorted(
-            candidates.values(),
-            key=lambda c: c.final_score,
-            reverse=True,
-        )[:top_k]
+        # 6. Stage 2: Cross-Encoder Re-Ranking
+        candidate_list = list(candidates.values())
+        reranked_candidates, _ = self.reranker.rerank(
+            query=query,
+            candidates=candidate_list,
+            top_k=top_k,
+        )
 
         latency_ms = (time.time() - start_time) * 1000
         if len(self._query_cache) >= 256:
             self._query_cache.pop(next(iter(self._query_cache)))
-        self._query_cache[cache_key] = (sorted_candidates, latency_ms)
-        return sorted_candidates, latency_ms
+        self._query_cache[cache_key] = (reranked_candidates, latency_ms)
+        return reranked_candidates, latency_ms
 
     def _vector_search(
         self,
@@ -197,12 +213,24 @@ class HybridRetriever:
         """
         score = 0.0
         query_lower = query.lower()
-        query_tokens = set(query_lower.split())
+        query_tokens = set(re.findall(r'\w+', query_lower))
         
+        # 0. Exact Standard Number / Code Match in Query
+        std_num = str(metadata.get("standard_number", "")).lower()
+        num_matches = re.findall(r'\d+', std_num)
+        for num in num_matches:
+            if len(num) >= 3 and num in query_lower:
+                score += 0.50
+                break
+
         # Check title match (English & Hindi)
         title = str(metadata.get("title", "")).lower()
-        title_tokens = set(title.split())
-        overlap = len(query_tokens & title_tokens)
+        title_tokens = set(re.findall(r'\w+', title))
+        # Direct token match or stemming (plural/singular)
+        overlap = sum(
+            1 for qt in query_tokens
+            if qt in title_tokens or any(qt.rstrip('s') == tt.rstrip('s') for tt in title_tokens if len(qt) > 3)
+        )
         if overlap > 0:
             score += min(0.5, overlap * 0.15)
 

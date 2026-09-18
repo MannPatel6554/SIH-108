@@ -119,6 +119,7 @@ class RecommendationEngine:
                 semantic_score=round(cand.semantic_score, 4),
                 lexical_score=round(cand.lexical_score, 4),
                 metadata_score=round(cand.metadata_score, 4),
+                cross_encoder_score=round(cand.cross_encoder_score, 4) if hasattr(cand, 'cross_encoder_score') else None,
                 final_score=round(cand.final_score, 4),
             )
 
@@ -138,8 +139,35 @@ class RecommendationEngine:
                 for cert in (std.certifications or [])
             ]
 
+            # GraphRAG: Real-time Allied Standards Bundle
+            allied_bundle = []
+            for rel in (std.source_relationships or []):
+                t_std = getattr(rel, 'target', None)
+                if t_std:
+                    allied_bundle.append({
+                        "id": t_std.id,
+                        "standard_number": t_std.standard_number,
+                        "title": t_std.title,
+                        "relationship_type": rel.relationship_type,
+                        "description": rel.description or f"Normative companion standard for {std.standard_number}",
+                        "status": t_std.status,
+                    })
+
+            # Deep Spec Search: Clause-Level Matching
+            matched_clauses = []
+            q_words = [w.lower() for w in normalized_query.split() if len(w) > 2]
+            for cl in (std.clauses or []):
+                cl_content = f"{cl.clause_number} {cl.clause_title} {cl.clause_text} {cl.key_tolerances or ''}".lower()
+                if any(w in cl_content for w in q_words) or len(matched_clauses) < 1:
+                    matched_clauses.append({
+                        "clause_number": cl.clause_number,
+                        "clause_title": cl.clause_title,
+                        "clause_text": cl.clause_text,
+                        "key_tolerances": cl.key_tolerances,
+                    })
+
             # Count allied standards
-            allied_count = len(std.source_relationships or [])
+            allied_count = len(allied_bundle)
 
             result = RecommendationResult(
                 standard_id=std.id,
@@ -162,6 +190,9 @@ class RecommendationEngine:
                 ] if std.verification_status == "DEMO" else [],
                 certifications=certifications,
                 allied_standards_count=allied_count,
+                allied_bundle=allied_bundle,
+                matched_clauses=matched_clauses[:3],
+                thesaurus_source=getattr(cand, 'thesaurus_source', None),
                 source_name=getattr(std, 'source_name', 'Bureau of Indian Standards') or 'Bureau of Indian Standards',
                 source_url=std.source_url,
                 source_type=getattr(std, 'source_type', 'OFFICIAL_BIS') or 'OFFICIAL_BIS',
@@ -184,7 +215,7 @@ class RecommendationEngine:
     async def _load_standards(
         self, standard_ids: List[str], db: AsyncSession
     ) -> Dict[str, Standard]:
-        """Load standards with certifications from DB."""
+        """Load standards with certifications, allied relationships, and clauses from DB."""
         if not standard_ids:
             return {}
         
@@ -192,7 +223,8 @@ class RecommendationEngine:
             select(Standard)
             .options(
                 selectinload(Standard.certifications),
-                selectinload(Standard.source_relationships),
+                selectinload(Standard.source_relationships).selectinload(StandardRelationship.target),
+                selectinload(Standard.clauses),
             )
             .where(Standard.id.in_(standard_ids))
         )

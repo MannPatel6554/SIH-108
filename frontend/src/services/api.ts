@@ -40,6 +40,21 @@ export async function searchStandards(request: {
   });
 }
 
+export async function submitSearchFeedback(data: {
+  query: string;
+  standard_id: string;
+  standard_number: string;
+  is_relevant: boolean;
+  rating?: number;
+  user_comment?: string;
+  user_role?: string;
+}) {
+  return apiRequest('/search/feedback', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
 // ─── Standards ────────────────────────────────────────────────────────────────
 
 export async function getStandards(params: {

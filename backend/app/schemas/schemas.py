@@ -188,6 +188,7 @@ class ScoreBreakdown(BaseModel):
     semantic_score: float
     lexical_score: float
     metadata_score: float
+    cross_encoder_score: Optional[float] = None
     final_score: float
 
 
@@ -214,6 +215,9 @@ class RecommendationResult(BaseModel):
     limitations: List[str] = []
     certifications: List[CertificationSchema] = []
     allied_standards_count: int = 0
+    allied_bundle: List[Dict[str, Any]] = []
+    matched_clauses: List[Dict[str, Any]] = []
+    thesaurus_source: Optional[str] = None
     # Provenance fields
     source_name: Optional[str] = "Bureau of Indian Standards"
     source_url: Optional[str] = None
@@ -337,3 +341,43 @@ class ExportRequest(BaseModel):
     results: List[RecommendationResult]
     checklist_items: List[ComplianceItemOut] = []
     include_explanations: bool = True
+
+
+# ─────────────────────────────────────────
+# Active Learning & Feedback Schemas
+# ─────────────────────────────────────────
+
+class SearchFeedbackCreate(BaseModel):
+    query: str
+    standard_id: str
+    standard_number: str
+    is_relevant: bool = True
+    rating: int = 5
+    user_comment: Optional[str] = None
+    user_role: Optional[str] = "PROCUREMENT_OFFICER"
+
+
+class SearchFeedbackResponse(BaseModel):
+    id: str
+    status: str
+    message: str
+
+
+class TrainingPairExport(BaseModel):
+    anchor_query: str
+    positive_standard: str
+    source: str
+    rating: int
+
+
+class StandardClauseSchema(BaseModel):
+    id: str
+    standard_id: str
+    standard_number: str
+    clause_number: str
+    clause_title: str
+    clause_text: str
+    key_tolerances: Optional[str] = None
+
+    class Config:
+        from_attributes = True
